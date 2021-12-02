@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='/css/styles.css') }}">
+    <title>Document</title>
+</head>
+<body>
+    {% block menu %}
+    <header>
+        <menu>
+            <ul>
+               <a href=#> 
+                   <li>
+                        Logo
+                   </li>
+               </a> 
+
+               <a href=#>
+                    <li>
+                    Games
+                    </li>
+               </a>
+
+                <a href=#>
+                    <li>
+                    Community
+                    </li>
+               </a>
+
+                <a href=#>
+                    <li>
+                    About
+                    </li>
+               </a>
+
+                <a href=#>
+                    <li>
+                    Support
+                    </li>
+               </a>
+
+            </ul>
+        </menu>
+    </header>
+    <div id="cart"><i class="fa fa-shopping-cart" style="font-size:2em"></i></div>
+    <script>
+        var cart = document.getElementById("cart")
+        cart.onclick = function(){
+            window.open("cart.html", "_self")
+        }
+    </script>
+    <a id="go_back" href="javascript:history.go(-1)">Go back...</a>
+    {% endblock %}
+</body>
+</html>
