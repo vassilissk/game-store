@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block menu %}
+{{super()}}
+
+{% endblock %}
+
+{% block main %}
+{{super()}}
+    <section class="game-main">
+        <div class="game-wrapper">
+            
+                {% set img = "game-img/" + game.name + ".jpg" %}
+                <div>
+                    <img class="game-foto" src={{url_for('static', filename=img)}} alt="">
+                </div>
+                <div class="game-price-and-button">
+                    <span>${{game.price}}</span>
+                    <button type="submit" class="game-buy-btn">Buy</button>
+                
+                
+                </div>
+        </div>
+    <hr>
+    </section>
+    {% endblock %}
+
+
+
+{%block footer%}
+{{super()}}
+{% endblock %}
