@@ -13,47 +13,76 @@
     <header>
         <menu>
             <ul>
-               <a href=#> 
-                   <li>
-                        Logo
+               <a href='/'> 
+                   <li class="logo">
+                       <span id="one">&#9055;</span>  <span id="two">Game store</span> 
                    </li>
                </a> 
 
-               <a href=#>
-                    <li>
+               <a href='/'>
+                    <li class="menu-item">
                     Games
                     </li>
                </a>
 
                 <a href=#>
-                    <li>
+                    <li class="menu-item">
                     Community
                     </li>
                </a>
 
                 <a href=#>
-                    <li>
+                    <li class="menu-item">
                     About
                     </li>
                </a>
 
                 <a href=#>
-                    <li>
+                    <li class="menu-item">
                     Support
                     </li>
                </a>
 
+               <a href="{{ url_for('test') }}">
+                <li class="profile-data">
+                    
+                <div><img class="foto" src="static\profile-img\author-image1.jpg" alt=""></div>
+                <div class="profile-name">name</div>
+                </li>
+           </a>
+
+               <a href="/cart">
+                <li class="cart">
+                <i class="fa fa-shopping-cart" ></i>
+                </li>
+           </a>
+
+           <a href=#>
+                <li class="qq">
+                    <i class="fa fa-sign-in"></i>
+                </li>
+            </a>
+
+
             </ul>
         </menu>
     </header>
-    <div id="cart"><i class="fa fa-shopping-cart" style="font-size:2em"></i></div>
-    <script>
-        var cart = document.getElementById("cart")
-        cart.onclick = function(){
-            window.open("cart.html", "_self")
-        }
-    </script>
-    <a id="go_back" href="javascript:history.go(-1)">Go back...</a>
+    <div ></div>
+
+    
+    {% endblock %}
+
+    {% block main %}
+
+    {% endblock %}
+
+{% block footer %}
+    <footer>
+        <div class="footer-logo">
+            <span id="logo">&#9055;</span>  <span id="logo-text">Game store</span>
+        </div>
+        <div id="copyrights">Copyrights 2021</div>
+    </footer>
     {% endblock %}
 </body>
 </html>

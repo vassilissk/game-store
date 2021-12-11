@@ -1,29 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='/css/styles.css') }}">
-    <title>test</title>
-</head>
-<body>
-    <div id="cart"><i class="fa fa-shopping-cart" style="font-size:2em"></i></div>
-    <section class="someclass">
-        <h2>Title</h2>
-  <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Perspiciatis non, inventore incidunt repudiandae id vel nisi officiis provident iste necessitatibus. Ex recusandae eveniet tempora.</p>
-  <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Perspiciatis non, inventore incidunt repudiandae id vel nisi officiis provident iste necessitatibus. Ex recusandae eveniet tempora.</p>
-  <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Perspiciatis non, inventore incidunt repudiandae id vel nisi officiis provident iste necessitatibus. Ex recusandae eveniet tempora.</p>
-  <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Perspiciatis non, inventore incidunt repudiandae id vel nisi officiis provident iste necessitatibus. Ex recusandae eveniet tempora.</p>
+{% extends "base.html" %}
+{% block menu %}
+{{super()}}
+<a href="#openModal">Open modal window</a>
+
+<div id="openModal" class="modalDialog">
+	<div>
+		<a id="close" href="#close" title="Close" class="close" onclick="func()"></a>
+		
+		
+		<form id="myform" action="{{ url_for('test')}}" method="post">
+			
+			{{ form.hidden_tag() }}
+			<div class="form-wrapper">
+				<div class="columns">
+					<p class="form-p"><span>{{ form.strategy.label() }}</span> <span>{{ form.strategy() }}</span></p>
+					<p class="form-p"><span>{{ form.adventure.label() }}</span> <span>{{ form.adventure() }}</span></p>
+					<p class="form-p"><span>{{ form.action.label() }}</span> <span>{{ form.action() }}</span></p>
+				</div>
+
+				<div class="columns">
+					<p class="form-p"><span>{{ form.survival.label() }}</span> <span>{{ form.survival() }}</span></p>
+					<p class="form-p"><span>{{ form.rpg.label() }}</span> <span>{{ form.rpg() }}</span></p>
+					<p class="form-p"><span>{{ form.fps.label() }}</span> <span>{{ form.fps() }}</span></p>
+				</div>
+			</div>
+		</form>
+		
+	</div>
 </div>
-    </section>
-    <script>
-        var cart = document.getElementById("cart")
-        cart.onclick = function(){
-            window.open("base.html", "_self")
-        }
-    </script>
-    
-</body>
-</html>
+
+<script>
+	function func(){		
+		document.getElementById('myform').submit();		
+	}
+</script>
+
+{% endblock %}

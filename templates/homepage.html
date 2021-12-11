@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block menu %}
+{{super()}}
+<section class="sort">
+    <a href="#openModal">Genres</a>
+
+<div id="openModal" class="modalDialog">
+	<div>
+		<a id="close" href="#close" title="Close" class="close" onclick="func()"></a>
+		
+		
+		<form id="myform" action="{{ url_for('index')}}" method="post">
+			
+			{{ form.hidden_tag() }}
+			<div class="form-wrapper">
+				<div class="columns">
+					<p class="form-p"><span>{{ form.strategy.label() }}</span> <span>{{ form.strategy() }}</span></p>
+					<p class="form-p"><span>{{ form.adventure.label() }}</span> <span>{{ form.adventure() }}</span></p>
+					<p class="form-p"><span>{{ form.action.label() }}</span> <span>{{ form.action() }}</span></p>
+				</div>
+
+				<div class="columns">
+					<p class="form-p"><span>{{ form.survival.label() }}</span> <span>{{ form.survival() }}</span></p>
+					<p class="form-p"><span>{{ form.rpg.label() }}</span> <span>{{ form.rpg() }}</span></p>
+					<p class="form-p"><span>{{ form.fps.label() }}</span> <span>{{ form.fps() }}</span></p>
+				</div>
+			</div>
+		</form>
+		
+	</div>
+</div>
+
+<script>
+	function func(){		
+		document.getElementById('myform').submit();		
+	}
+</script>
+</section>
+<section class="main">
+    {% for i in range(0,len,3) %}
+
+    <div class="wrapper">
+        {% for j in range(i,i+3) %}
+            {% if list_of_games[j] %}
+
+                <article class="game-in-list">
+                    {% set img = "game-img/" + list_of_games[j].name + ".jpg" %}
+
+                    <a href="{{ url_for('game', game_id=list_of_games[j].id) }}">
+                        <img class="game-foto" src={{url_for('static', filename=img)}} alt="">
+                    </a>
+                    <div class="price-and-button">
+                        <span>${{list_of_games[j].price}}</span>
+                        
+                        <form  method='GET'>
+                            <input type="submit" class="buy-btn" value="Buy">
+                            </form>
+                    </div>
+                    <div class="genre">{{list_of_games[j].genre}}</div>
+                    <div class="game-name">{{list_of_games[j].name}}</div>
+                </article>
+            {% endif %}
+        {% endfor %}
+    </div>
+    {% endfor %}
+
+
+</section>
+{% endblock %}
+
+{% block footer %}
+{{super()}}
+    {% endblock %}
