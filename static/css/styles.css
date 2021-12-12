@@ -5,6 +5,8 @@ display: flex;
 flex-direction: column;
 align-content: space-around;}
 
+                                           /*             menu                */
+
 ul a{text-decoration: none;
 display: block;
 flex-direction: row;
@@ -17,7 +19,9 @@ menu li{list-style: none;
     padding-right: 2em;    
     }
 
-menu{display: block;
+menu{
+    margin: 0;
+    display: flex;
     border-style: solid;
 border-color: blue;
 padding: 0;
@@ -57,25 +61,22 @@ align-items: center;
 .game-in-list{
     flex-direction: column;
     align-items:center;
-      border-style: solid;
-      border-color: yellow;
       margin: 4%;
       width: 25%;
       height: 80%;
       }
+
+
+                                             /*            main                 */
+
 .main{display: flex;
     flex-direction: column;
     height: 80vh;
     width: 95%;
-    border-color: rgb(0, 255, 106);
-    border-style: solid;
     background-color: rgb(27, 27, 27);
     margin: 2vw;
     overflow-y: scroll;
-    }
-
-    
-    
+    } 
     
 
 .price-and-button{
@@ -124,8 +125,7 @@ section .game-main{display: block;
     flex-direction: column;
     align-items:center;
     width: 90%;
-    border-color: rgb(0, 255, 106);
-    border-style: solid;
+    
     background-color: rgb(27, 27, 27);
     margin: 0;
     }
@@ -151,7 +151,7 @@ width: 90%;}
     font-size: 3em;
 }
 
-
+                                                     /* modal window sort */
 
 
 .modalDialog {
@@ -161,7 +161,7 @@ width: 90%;}
 	right: 0;
 	bottom: 0;
 	left: 0;
-	background: rgba(0,0,0,0);
+	/* background: rgba(0,0,0,0.5); */
 	z-index: 1;
 	
 	display: none;
@@ -193,7 +193,7 @@ width: 90%;}
 	z-index:-1;
 }
 
-/* .close:hover { background: #00d9ff; } */
+
 .form-p{
     display: flex;
     align-items:center;
@@ -210,4 +210,137 @@ color: black;
 .columns{
      width: 33%;
      
+}
+
+.add-genre{
+color: white;
+text-decoration: none;
+font-size: x-large;
+font-weight: bolder;
+}
+.add-genre-search{
+    display: flex;
+    justify-content:space-between;
+    border: none;
+    padding-left: 5%;
+    padding-right: 5%;
+    align-items:center;
+}    
+
+                                               /*               search                  */
+
+#search p{
+    display: block;
+    /* align-items:center;
+    z-index: 1;
+    position: absolute;
+    top: 18%;
+	right: 10%;
+    border: none; */
+    margin: 0;
+}
+#search{display: block;
+position: absolute;
+right: 8%;
+top: 18%;
+background-color: rgb(86, 88, 90);
+border: none;}
+
+#glass{
+    position: absolute;
+    display: block;
+    z-index: 2;
+    /* position: fixed; */
+    top: 18%;
+    right: 22%;      
+}
+
+#search-block{
+    width: 50%;
+    display: flex;
+	pointer-events: auto;
+    align-items:center;
+    flex-direction: column;    
+}
+                                                  /*              login                  */
+
+
+.loginDialog {
+	position: absolute;
+	font-family: Arial, Helvetica, sans-serif;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background: rgba(0,0,0,0.8);
+	z-index: 3;
+	color: black;
+	display: none;
+	pointer-events: none; 
+}
+.loginDialog:target {
+	display: flex;
+	pointer-events: auto;
+    align-items:center;
+    justify-content: center;
+    
+}
+
+#form_login p span{border: none;}
+
+.loginDialog > div {
+	width: 300px;
+	position: relative;
+	margin: 10% auto;
+	padding: 5px 20px 13px 20px;
+	border-radius: 10px;
+	background: rgb(202, 202, 212);
+    	
+    
+}
+
+.loginDialog a{
+    color: black;
+    text-decoration: none;
+}
+
+.loginDialog .login-p{
+    display: flex;
+    flex-direction: column;    
+}
+
+.login-internal-span{
+    /* border-style: solid;
+border-color: blue; */
+display: flex;
+justify-content: center;
+
+}
+
+.login-internal-sign-in{
+    display: flex;
+justify-content: center;
+}
+
+#sign-in, #sign_up_submit{
+    background-color: rgb(45, 153, 45);
+    border: none;
+    border-radius: 3px;
+    width: 7em;
+    height: 2em;
+}
+.close {
+	
+	position: fixed;
+	
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	
+	z-index:-1;
+}
+
+#login_user_name, #login_password{
+    border: none;
 }

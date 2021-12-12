@@ -1,12 +1,107 @@
 {% extends "base.html" %}
 {% block menu %}
 {{super()}}
-<section class="sort">
-    <a href="#openModal">Genres</a>
 
+
+
+
+<section class="main">
+
+    <section class="login">
+        <div id="register" class="loginDialog">
+            
+            <div>
+    
+                <a id="closelogin" href="#closelogin" title="Close" class="closelogin">x</a>
+                <div class="login-internal">
+                    <div class="login-internal-span">
+                        <span>Please sign up</span>
+                    </div>
+                    
+                    <form id="form_login" action="{{ url_for('index')}}" method="post">
+                        {{ form.hidden_tag() }}
+                        
+                        <p class="login-p"><span>{{ form.username.label() }}</span> <span>{{ form.username() }}</span></p>
+                        {% with messages = get_flashed_messages() %}  
+                           {% if messages %}  
+                                 {% for message in messages %}  
+                                      <p>{{ message }}</p>  
+                                 {% endfor %}  
+                           {% endif %}  
+                        {% endwith %}  
+                        <!-- <span>Error message to do !!!!!</span> -->
+                        <p class="login-p"><span>{{ form.first_name.label() }}</span> <span>{{ form.first_name() }}</span></p>
+                        <p class="login-p"><span>{{ form.last_name.label() }}</span> <span>{{ form.last_name() }}</span></p>
+                        <p class="login-p"><span>{{ form.password.label() }}</span> <span>{{ form.password() }}</span></p>
+                        <p class="login-p"><span>{{ form.confirm_password.label() }}</span> <span>{{ form.confirm_password() }}</span></p>
+                        <p class="login-p"><span>{{ form.email.label() }}</span> <span>{{ form.email() }}</span></p>
+                        {% with messages = get_flashed_messages() %}  
+                           {% if messages %}  
+                                 {% for message in messages %}  
+                                      <p>{{ message }}</p>  
+                                 {% endfor %}  
+                           {% endif %}  
+                        {% endwith %}  
+
+                         <div class="login-internal-sign-in">{{ form.sign_up_submit() }}</div>
+                        
+                    </form>
+                </div>
+            </div>
+            
+        </div>
+    </section>
+
+    
+                          <!-- ------------------login------------------- -->
+<section class="login">
+    <div id="login" class="loginDialog">
+        
+        <div>
+
+            <a id="closelogin" href="#closelogin" title="Close" class="closelogin">x</a>
+            <div class="login-internal">
+                <div class="login-internal-span">
+                    <span>Please login</span>
+                </div>
+                
+                <form id="form_login" action="{{ url_for('index')}}" method="post">
+                    {{ form.hidden_tag() }}
+                    
+                    <p class="login-p"><span>{{ form.login_user_name.label() }}</span> <span>{{ form.login_user_name() }}</span></p>
+                    <!-- <span>Error message to do !!!!!</span> -->
+                    <p class="login-p"><span>{{ form.login_password.label() }}</span> <span>{{ form.login_password() }}</span></p>
+
+                    <p class="login-p"><span>{{ form.remember_me.label() }}</span> <span>{{ form.remember_me() }}</span></p>
+                     <div class="login-internal-sign-in">{{ form.login_submit() }}</div>
+                    <a href="{{ url_for('index') }}#register">Register</a>
+                </form>
+            </div>
+        </div>
+        
+    </div>
+</section>
+
+                             <!-- !-- ------------------sort  by categories------------------- -->
+<section class="sort">
+    <div class="add-genre-search">
+        <a href="#openModal" class="add-genre">+ Add Genre</a>
+        
+        <div id="search_block">
+            <a href="#search" id="glass" onclick="search_for_game()"><i class="fa fa-search"></i>;</a> 
+            <form id="search" action="{{ url_for('index')}}" method="post">
+               {{ form.hidden_tag() }}
+                <p> 
+                {{ form.search() }}</p>
+            </form>
+        </div>
+        
+        
+        </form>
+    </div>
 <div id="openModal" class="modalDialog">
 	<div>
-		<a id="close" href="#close" title="Close" class="close" onclick="func()"></a>
+		<a id="closeModal" href="#closeModal" title="Close" class="close" onclick="func()"></a>
 		
 		
 		<form id="myform" action="{{ url_for('index')}}" method="post">
@@ -32,11 +127,16 @@
 
 <script>
 	function func(){		
-		document.getElementById('myform').submit();		
+		document.getElementById('myform').submit();        
 	}
+
+    function search_for_game(){        
+        document.getElementById('search').submit();        
+    }
 </script>
 </section>
-<section class="main">
+
+                                       <!-- ------------------ main section of games------------------ -->
     {% for i in range(0,len,3) %}
 
     <div class="wrapper">
