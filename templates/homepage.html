@@ -22,20 +22,20 @@
                         {{ form.hidden_tag() }}
                         
                         <p class="login-p"><span>{{ form.username.label() }}</span> <span>{{ form.username() }}</span></p>
-                        {% with messages = get_flashed_messages() %}  
+                        <!-- {% with messages = get_flashed_messages() %}  
                            {% if messages %}  
                                  {% for message in messages %}  
                                       <p>{{ message }}</p>  
                                  {% endfor %}  
                            {% endif %}  
-                        {% endwith %}  
+                        {% endwith %}   -->
                         <!-- <span>Error message to do !!!!!</span> -->
                         <p class="login-p"><span>{{ form.first_name.label() }}</span> <span>{{ form.first_name() }}</span></p>
                         <p class="login-p"><span>{{ form.last_name.label() }}</span> <span>{{ form.last_name() }}</span></p>
                         <p class="login-p"><span>{{ form.password.label() }}</span> <span>{{ form.password() }}</span></p>
                         <p class="login-p"><span>{{ form.confirm_password.label() }}</span> <span>{{ form.confirm_password() }}</span></p>
                         <p class="login-p"><span>{{ form.email.label() }}</span> <span>{{ form.email() }}</span></p>
-                        {% with messages = get_flashed_messages() %}  
+                        <div class="flash-message">{% with messages = get_flashed_messages() %}  
                            {% if messages %}  
                                  {% for message in messages %}  
                                       <p>{{ message }}</p>  
@@ -44,7 +44,7 @@
                         {% endwith %}  
 
                          <div class="login-internal-sign-in">{{ form.sign_up_submit() }}</div>
-                        
+                        </div>
                     </form>
                 </div>
             </div>

@@ -62,27 +62,27 @@ def index():
             users = User.query.all()
             user_list = [user.username for user in users]
             email_list = [user.email for user in users]
-            print(email in email_list)
+            # print(email in email_list)
             # print(email_list)
             # print(user_list)
             # print(User.query.filter(User.email == request.form['email'])[0].email)
             if user in user_list:
-                print(f"User {username} already exists")
-                flash(f"User {username} already exists")
-            if email in email_list:
-                print(f"Email {email} already exists")
+                print(f"User {user} already exists")
+                flash(f"User {user} already exists")
+                return flask.redirect("/index#register")
 
-                flash(f"Email {email} already exists")
+            elif email in email_list:
+                flash(f"e-mail {email} already exists")
                 return flask.redirect("/index#register")
 
             # if request.form['password'] == request.form['confirm_password']
-            # hash == generate_password_hash(request.form['password'])
+            hash = generate_password_hash(request.form['password'])
 
-            # user = User(username=request.form['username'], first_name=request.form['first_name'],
-            #             last_name=request.form['last_name'],password=request.form['password'],
-            #             email=request.form['email'])
-            # db.session.add(user)
-            # db.session.commit()
+            user = User(username=request.form['username'], first_name=request.form['first_name'],
+                        last_name=request.form['last_name'],password=hash,
+                        email=request.form['email'])
+            db.session.add(user)
+            db.session.commit()
     list_of_games = Game.query.all()
     return render_template("homepage.html", list_of_games=list_of_games, len=len(list_of_games),
                            form=form)

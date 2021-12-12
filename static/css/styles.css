@@ -22,8 +22,8 @@ menu li{list-style: none;
 menu{
     margin: 0;
     display: flex;
-    border-style: solid;
-border-color: blue;
+    /* border-style: solid;
+border-color: blue; */
 padding: 0;
 width: 99vw;}
 
@@ -31,8 +31,8 @@ width: 99vw;}
      padding: 0%;
      display: flex;
      align-items: center;
-      border-style: solid;
-border-color: yellow;
+      /* border-style: solid;
+border-color: yellow; */
  }
 
  ul a{display: block;}
@@ -50,9 +50,14 @@ display: flex;
 align-items: center;
 }
 #one{font-size: 200%;}
-.profile-data {display: flex;align-items: center;justify-content:space-around}
-.profile-name {padding-left: 1vw;}
-.foto {width: 4vh;border-radius: 2vh;}
+.profile-data {
+    display: flex;
+    align-items: center;
+    justify-content:space-around}
+.profile-name {
+    padding-left: 1vw;}
+.foto {
+    width: 4vh;border-radius: 2vh;}
 
 .menu-item{font-size: 130%;}
 .game-foto{width: 100%;
@@ -240,17 +245,19 @@ font-weight: bolder;
     margin: 0;
 }
 #search{display: block;
-position: absolute;
+/* position: absolute; */
 right: 8%;
 top: 18%;
 background-color: rgb(86, 88, 90);
-border: none;}
+border: none;
+/* position: absolute; */
+}
 
 #glass{
-    position: absolute;
+    /* position: absolute; */
     display: block;
     z-index: 2;
-    /* position: fixed; */
+    /* position: absolute; */
     top: 18%;
     right: 22%;      
 }
@@ -343,4 +350,8 @@ justify-content: center;
 
 #login_user_name, #login_password{
     border: none;
+}
+
+.flash-message{
+    color: red;
 }
