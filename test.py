@@ -40,5 +40,5 @@ class SomeForm(FlaskForm):
                              validators=[DataRequired(), Length(min=4, max=100)])
     confirm_password = PasswordField('Confirm password', id='confirm_password',
                              validators=[DataRequired(), Length(min=4, max=100)])
-    email = StringField('Email', validators=[Email()])
+    email = StringField('Email', validators=[DataRequired(),Email()])
     sign_up_submit = SubmitField('Sign up', id='sign_up_submit')

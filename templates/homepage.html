@@ -12,13 +12,13 @@
             
             <div>
     
-                <a id="closelogin" href="#closelogin" title="Close" class="closelogin">x</a>
+                <a id="closeregistr" href="#closelogin" title="Close" class="closelogin">x</a>
                 <div class="login-internal">
                     <div class="login-internal-span">
                         <span>Please sign up</span>
                     </div>
                     
-                    <form id="form_login" action="{{ url_for('index')}}" method="post">
+                    <form id="form_registr" action="{{ url_for('index')}}" method="post">
                         {{ form.hidden_tag() }}
                         
                         <p class="login-p"><span>{{ form.username.label() }}</span> <span>{{ form.username() }}</span></p>
