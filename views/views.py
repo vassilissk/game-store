@@ -83,6 +83,8 @@ def index():
                         email=request.form['email'])
             db.session.add(user)
             db.session.commit()
+            flash(f"User {user.username} is registered")
+            return flask.redirect("/index#login")
     list_of_games = Game.query.all()
     return render_template("homepage.html", list_of_games=list_of_games, len=len(list_of_games),
                            form=form)

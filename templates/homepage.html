@@ -35,7 +35,8 @@
                         <p class="login-p"><span>{{ form.password.label() }}</span> <span>{{ form.password() }}</span></p>
                         <p class="login-p"><span>{{ form.confirm_password.label() }}</span> <span>{{ form.confirm_password() }}</span></p>
                         <p class="login-p"><span>{{ form.email.label() }}</span> <span>{{ form.email() }}</span></p>
-                        <div class="flash-message">{% with messages = get_flashed_messages() %}  
+                        <div class="flash-message">
+                        {% with messages = get_flashed_messages() %}  
                            {% if messages %}  
                                  {% for message in messages %}  
                                       <p>{{ message }}</p>  
@@ -73,6 +74,17 @@
                     <p class="login-p"><span>{{ form.login_password.label() }}</span> <span>{{ form.login_password() }}</span></p>
 
                     <p class="login-p"><span>{{ form.remember_me.label() }}</span> <span>{{ form.remember_me() }}</span></p>
+
+                    <div class="flash-message">
+                    {% with messages = get_flashed_messages() %}  
+                           {% if messages %}  
+                                 {% for message in messages %}  
+                                      <p>{{ message }}</p>  
+                                 {% endfor %}  
+                           {% endif %}  
+                        {% endwith %} 
+                    </div>
+
                      <div class="login-internal-sign-in">{{ form.login_submit() }}</div>
                     <a href="{{ url_for('index') }}#register">Register</a>
                 </form>
@@ -133,6 +145,7 @@
     function search_for_game(){        
         document.getElementById('search').submit();        
     }
+    
 </script>
 </section>
 
