@@ -42,3 +42,7 @@ class SomeForm(FlaskForm):
                              validators=[DataRequired(), Length(min=4, max=100)])
     email = StringField('Email', validators=[DataRequired(),Email()])
     sign_up_submit = SubmitField('Sign up', id='sign_up_submit')
+
+    logout = BooleanField('confirm')
+
+    logout_submit = SubmitField('Logout', id='log_out')

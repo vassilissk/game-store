@@ -3,15 +3,22 @@ import os
 
 from flask_sqlalchemy import SQLAlchemy
 from setup import app
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import LoginManager, UserMixin,current_user
+
+login_manager = LoginManager(app)
 
 db = SQLAlchemy(app)
 
 
 # from models.models import db
-#db.create_all()
+# db.create_all()
+@login_manager.user_loader
+def load_user(user_id):
+    return db.session.query(User).get(user_id)
 
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     first_name = db.Column(db.String(80), unique=True, nullable=False)

@@ -2,22 +2,41 @@ import sqlite3, os
 from datetime import datetime
 
 import flask
-from flask import render_template, url_for, request, redirect, session,flash
+from flask import render_template, url_for, request, redirect, session, flash
 from setup import app
 from models.models import *
 from test import SomeForm
+
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import LoginManager, UserMixin, current_user, \
+    login_required, login_user, logout_user
+
+# login_manager = LoginManager(app)
+login_manager.login_view = '/index#login'
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return db.session.query(User).get(user_id)
+
 
 print('Hello World ssss')
 
 
-@app.route('/', methods=["POST", "GET"])
+@app.route('/admin')
+@login_required
+def admin():
+    return render_template('admin.html')
+
 @app.route('/index', methods=["POST", "GET"])
-def index():
+@app.route('/', methods=["POST", "GET"])
+
+def index(user_name=None):
     form = SomeForm()
+    print(current_user.__dict__)
 
     genres = ['strategy', 'adventure', 'action', 'survival', 'rpg', 'rpg']
-    selected_genres=dict()
+    selected_genres = dict()
     if request.method == 'POST':
 
         list_of_games = []
@@ -33,6 +52,8 @@ def index():
             return render_template("homepage.html", list_of_games=list_of_games, len=len(list_of_games),
                                    form=form)
 
+            # -----------------sort by genres ---------------
+
         if any([genre in request.form for genre in genres]):
             flash('You were successfully logged in')
             for genre in genres:
@@ -43,18 +64,31 @@ def index():
                     for game in genre_games:
                         list_of_games.append(game)
             return render_template("homepage.html", list_of_games=list_of_games, len=len(list_of_games),
-                                               form=form)
+                                   form=form)
 
-            print(genre)
+
             print(selected_genres)
             print(list_of_games)
 
+            # ----------- login ---------------
+
         if 'login_user_name' in request.form:
-            # print(request.form['login_user_name'])
-            # print(request.form['login_password'])
-            # print(request.form['remember_me'])
-            # print(request.form['login_submit'])
-            pass
+
+            print(request.form)
+            username = request.form.get('login_user_name')
+            password = request.form.get('login_password')
+            remember_me = request.form.get('remember_me')
+
+            log_user = db.session.query(User).filter(User.username == username).first()
+            print(log_user.email)
+            if log_user and check_password_hash(log_user.password, password):
+                login_user(log_user, remember=remember_me)
+                return redirect(url_for('index'))
+
+            flash("Invalid username/password", 'error')
+            return redirect(url_for('index'))
+
+            # ------------------------registration------------------------
 
         if 'username' in request.form:
             user = request.form['username']
@@ -62,10 +96,7 @@ def index():
             users = User.query.all()
             user_list = [user.username for user in users]
             email_list = [user.email for user in users]
-            # print(email in email_list)
-            # print(email_list)
-            # print(user_list)
-            # print(User.query.filter(User.email == request.form['email'])[0].email)
+
             if user in user_list:
                 print(f"User {user} already exists")
                 flash(f"User {user} already exists")
@@ -79,26 +110,39 @@ def index():
             hash = generate_password_hash(request.form['password'])
 
             user = User(username=request.form['username'], first_name=request.form['first_name'],
-                        last_name=request.form['last_name'],password=hash,
+                        last_name=request.form['last_name'], password=hash,
                         email=request.form['email'])
             db.session.add(user)
             db.session.commit()
             flash(f"User {user.username} is registered")
             return flask.redirect("/index#login")
+
+
+
+        # if "logout" in request.form:
+        #     print('hello logout')
+        #     logout_user()
+
+
+
     list_of_games = Game.query.all()
+
+    if current_user.is_authenticated:
+        inorout = "fa fa-sign-out"
+        logged = "logout"
+        show_profile = ""
+    else:
+        inorout = "fa fa-sign-in"
+        logged = "login"
+        show_profile = "none"
+
     return render_template("homepage.html", list_of_games=list_of_games, len=len(list_of_games),
-                           form=form)
+                           form=form, inorout=inorout, logged=logged, show_profile=show_profile)
 
 
 @app.route('/cart')
 def cart():
-    # a=5
-    # session['a']=3
-    # print(url_for('cart'))
-    # print(session, app.config)
-    # me = Game(name='Grand Theft Auto V', price=199.3, genre='strategy',image='Grand Theft Auto V.jpg')
-    # db.session.add(me)
-    # db.session.commit()
+
     return render_template("cart.html")
 
 
@@ -107,7 +151,6 @@ def game(game_id):
     game = Game.query.filter(Game.id == game_id)[0]
 
     return render_template("game.html", game=game)
-
 
 
 @app.route('/test', methods=["POST", "GET"])
@@ -119,3 +162,12 @@ def test():
     #     a = request.form.get('strategy', False)
     #     print(bool(a))
     return render_template("test.html", form=form)
+
+
+@app.route('/index#logout', methods=["POST", "GET"])
+@login_required
+def logout():
+    print("helloooooooooooooooooo")
+    logout_user()
+    flash("You have been logged out.")
+    return redirect("/index")

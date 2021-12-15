@@ -3,8 +3,6 @@
 {{super()}}
 
 
-
-
 <section class="main">
 
     <section class="login">
@@ -22,14 +20,7 @@
                         {{ form.hidden_tag() }}
                         
                         <p class="login-p"><span>{{ form.username.label() }}</span> <span>{{ form.username() }}</span></p>
-                        <!-- {% with messages = get_flashed_messages() %}  
-                           {% if messages %}  
-                                 {% for message in messages %}  
-                                      <p>{{ message }}</p>  
-                                 {% endfor %}  
-                           {% endif %}  
-                        {% endwith %}   -->
-                        <!-- <span>Error message to do !!!!!</span> -->
+
                         <p class="login-p"><span>{{ form.first_name.label() }}</span> <span>{{ form.first_name() }}</span></p>
                         <p class="login-p"><span>{{ form.last_name.label() }}</span> <span>{{ form.last_name() }}</span></p>
                         <p class="login-p"><span>{{ form.password.label() }}</span> <span>{{ form.password() }}</span></p>
@@ -91,6 +82,45 @@
             </div>
         </div>
         
+    </div>
+</section>
+
+                <!--------------------logout----------------------->
+
+    <section class="login">
+    <div id="logout" class="loginDialog">
+
+        <div>
+
+            <a id="closelogout" href="#closelogin" title="Close" class="closelogin">x</a>
+            <div class="login-internal">
+                <div class="login-internal-span">
+                    <span>Are you sure want to logout ?</span>
+                </div>
+
+                <form id="form_logout" action="{{ url_for('logout')}}" method="post">
+                    {{ form.hidden_tag() }}
+
+
+
+                    <!-- <p class="login-p"><span>{{ form.logout.label() }}</span> <span>{{ form.logout() }}</span></p> -->
+
+                    <div class="flash-message">
+                    {% with messages = get_flashed_messages() %}
+                           {% if messages %}
+                                 {% for message in messages %}
+                                      <p>{{ message }}</p>
+                                 {% endfor %}
+                           {% endif %}
+                        {% endwith %}
+                    </div>
+
+                     <div class="login-internal-sign-in">{{ form.logout_submit() }}</div>
+                   
+                </form>
+            </div>
+        </div>
+
     </div>
 </section>
 

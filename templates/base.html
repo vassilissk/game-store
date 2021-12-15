@@ -44,10 +44,10 @@
                </a>
 
                <a href="{{ url_for('test') }}">
-                <li class="profile-data">
+                <li class="profile-data" style="display:{{show_profile}}">
                     
-                <div><img class="foto" src="static\profile-img\author-image1.jpg" alt=""></div>
-                <div class="profile-name">name</div>
+                <div><img class="foto" src="static\profile-img\{{ current_user.username }}.jpg" alt=""></div>
+                <div class="profile-name">{{ current_user.username }}</div>
                 </li>
            </a>
 
@@ -57,9 +57,9 @@
                 </li>
            </a>
 
-           <a href="{{ url_for('index') }}#login">
+           <a href="{{ url_for('index') }}#{{logged}}">
                 <li class="qq">
-                    <i class="fa fa-sign-in"></i>
+                    <i class="{{ inorout }}"></i>
                 </li>
             </a>
 
