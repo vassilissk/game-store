@@ -1,15 +1,9 @@
-import os
-import sqlite3
-
 import flask
-from flask_sqlalchemy import SQLAlchemy
-from flask import render_template, url_for, request, redirect, session, flash
+from flask import render_template, url_for, request, redirect, flash
 from setup import app
-from test import SomeForm
-from flask_login import LoginManager, UserMixin, current_user, \
-    login_required, login_user, logout_user
+from service.forms import SomeForm
+from flask_login import login_user
 from models.models import *
-import uuid
 
 database = os.path.join(app.root_path, 'service', 'database.db')
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + database

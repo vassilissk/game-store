@@ -31,7 +31,7 @@ class SomeForm(FlaskForm):
     login_submit = SubmitField('Sign in', id='sign-in')
     remember_me = BooleanField('Remember me')
     username = StringField('User name', id='username',
-                             validators=[DataRequired(), Length(min=2)])
+                           validators=[DataRequired(), Length(min=2)])
     first_name = StringField('First name', id='first_name',
                              validators=[DataRequired(), Length(min=2)])
     last_name = StringField('Last name', id='last_name',
@@ -39,12 +39,15 @@ class SomeForm(FlaskForm):
     password = PasswordField('Password', id='password',
                              validators=[DataRequired(), Length(min=4, max=100)])
     confirm_password = PasswordField('Confirm password', id='confirm_password',
-                             validators=[DataRequired(), Length(min=4, max=100)])
-    email = StringField('Email', validators=[DataRequired(),Email()])
+                                     validators=[DataRequired(), Length(min=4, max=100)])
+    email = StringField('Email', validators=[DataRequired(), Email()])
     sign_up_submit = SubmitField('Sign up', id='sign_up_submit')
+    profile_password = PasswordField('Password', validators=[Length(min=4, max=100)])
+    profile_confirm_password = PasswordField('Password', validators=[Length(min=4, max=100)])
+    profile_submit = SubmitField('Save')
 
     logout = BooleanField('confirm')
 
     logout_submit = SubmitField('Logout', id='log_out')
-    upload = FileField('file',name='img')
-    upload_submit = SubmitField('Sign up')
+    upload = FileField('Upload avatar', name='img')
+    upload_submit = SubmitField('Upload')

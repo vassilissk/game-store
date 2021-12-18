@@ -1,19 +1,12 @@
-import sqlite3, os
-from datetime import datetime
-
-import flask, numpy
-import cv2
 # from cv2 import cv
-from flask import render_template, url_for, request, redirect, session, flash
 from service.crud_operations import *
-from werkzeug.utils import secure_filename
-
+import sqlite3
 from setup import app
 from models.models import *
-from test import SomeForm
+from service.forms import SomeForm
 
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import LoginManager, UserMixin, current_user, \
+from flask_login import LoginManager, current_user, \
     login_required, login_user, logout_user
 
 login_manager = LoginManager(app)
@@ -172,20 +165,33 @@ def logout():
     return redirect("/index")
 
 
-@app.route('/profile')
+@app.route('/profile', methods=["POST", "GET"])
 @login_required
 def profile():
     form = SomeForm()
-    if current_user.is_authenticated:
-        inorout = "fa fa-sign-out"
-        logged = "logout"
-        show_profile = ""
-    else:
-        inorout = "fa fa-sign-in"
-        logged = "login"
-        show_profile = "none"
+    if request.method == 'POST':
+
+        image = request.files['img']
+        password = request.form['profile_password']
+        confirm_password = request.form['profile_confirm_password']
+        print(bool(password), bool(confirm_password))
+        avatar = image.read()
+        user = User.query.filter_by(username=current_user.username).first()
+        if password and password == confirm_password:
+
+            user.password = generate_password_hash(request.form['password'])
+        elif password:
+            flash("passwords must match")
+        if avatar:
+            user.avatar = sqlite3.Binary(avatar)
+        user.username = request.form['username']
+        user.email = request.form['email']
+        user.first_name = request.form['first_name']
+        user.last_name = request.form['last_name']
+        db.session.commit()
+    in_or_out, logged, show_profile = show_log_in_out()
     return render_template("profile.html", form=form,
-                           inorout=inorout, logged=logged, show_profile=show_profile)
+                           in_or_out=in_or_out, logged=logged, show_profile=show_profile)
 
 
 # def show_log_in_out():
