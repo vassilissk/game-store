@@ -16,7 +16,7 @@ def show_log_in_out():
     if current_user.is_authenticated:
         inorout = "fa fa-sign-out"
         logged = "logout"
-        show_profile = ""
+        show_profile = "flex"
     else:
         inorout = "fa fa-sign-in"
         logged = "login"

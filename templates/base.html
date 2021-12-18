@@ -47,7 +47,7 @@
                 <li class="profile-data" style="display:{{show_profile}}">
                     
                 <div><img class="foto" src="{{ url_for('userava') }}" alt=""></div>
-                <div class="profile-name">{{ current_user.username }}</div>
+                <div class="profile-name">{{ current_user.first_name }} {{ current_user.last_name }}</div>
                 </li>
            </a>
 

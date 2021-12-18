@@ -30,7 +30,8 @@ def admin():
 @app.route('/index', methods=["POST", "GET"])
 @app.route('/', methods=["POST", "GET"])
 def index():
-
+    res = flask.make_response()
+    res.set_cookie("remember_token", "", expires=0)
     form = SomeForm()
 
     genres = ['strategy', 'adventure', 'action', 'survival', 'rpg', 'rpg']
@@ -125,11 +126,14 @@ def cart():
     return render_template("cart.html", form=form)
 
 
-@app.route('/game/<game_id>')
-def game(game_id):
-    game = Game.query.filter(Game.id == game_id)[0]
+@app.route('/game/<name>')
+def game(name):
+    form = SomeForm()
+    current_game = Game.query.filter(Game.name == name).first()
+    in_or_out, logged, show_profile = show_log_in_out()
 
-    return render_template("game.html", game=game)
+    return render_template("game.html", game=current_game, form=form,
+                           in_or_out=in_or_out, logged=logged, show_profile=show_profile)
 
 
 @app.route('/test', methods=["POST", "GET"])
@@ -179,7 +183,7 @@ def profile():
         user = User.query.filter_by(username=current_user.username).first()
         if password and password == confirm_password:
 
-            user.password = generate_password_hash(request.form['password'])
+            user.password = generate_password_hash(request.form['profile_password'])
         elif password:
             flash("passwords must match")
         if avatar:
@@ -194,13 +198,13 @@ def profile():
                            in_or_out=in_or_out, logged=logged, show_profile=show_profile)
 
 
-# def show_log_in_out():
-#     if current_user.is_authenticated:
-#         inorout = "fa fa-sign-out"
-#         logged = "logout"
-#         show_profile = ""
-#     else:
-#         inorout = "fa fa-sign-in"
-#         logged = "login"
-#         show_profile = "none"
-#     return inorout, logged, show_profile
+def show_log_in_out():
+    if current_user.is_authenticated:
+        inorout = "fa fa-sign-out"
+        logged = "logout"
+        show_profile = ""
+    else:
+        inorout = "fa fa-sign-in"
+        logged = "login"
+        show_profile = "none"
+    return inorout, logged, show_profile

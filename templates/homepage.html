@@ -73,13 +73,13 @@
                 <article class="game-in-list">
                     {% set img = "game-img/" + list_of_games[j].name + ".jpg" %}
 
-                    <a href="{{ url_for('game', game_id=list_of_games[j].id) }}">
+                    <a href="{{ url_for('game', name=list_of_games[j].name) }}">
                         <img class="game-foto" src={{url_for('static', filename=img)}} alt="">
                     </a>
                     <div class="price-and-button">
                         <span>${{list_of_games[j].price}}</span>
                         
-                        <form  method='GET'>
+                        <form  method='post'>
                             <input type="submit" class="buy-btn" value="Buy">
                             </form>
                     </div>
