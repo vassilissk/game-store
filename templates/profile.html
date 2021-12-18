@@ -1,10 +1,12 @@
 {% extends "base.html" %}
 {% block menu %}
 {{super()}}
-
 {% endblock %}
 
 {% block main %}
-<h1>Cart</h1>
+<h1> Profile {{current_user.username}}</h1>
 {% endblock %}
 
+{% block footer %}
+{{super()}}
+    {% endblock %}

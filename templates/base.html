@@ -37,16 +37,16 @@
                     </li>
                </a>
 
-                <a href=#>
+                <a href="{{ url_for('test') }}">
                     <li class="menu-item">
                     Support
                     </li>
                </a>
 
-               <a href="{{ url_for('test') }}">
+               <a href="{{ url_for('profile') }}">
                 <li class="profile-data" style="display:{{show_profile}}">
                     
-                <div><img class="foto" src="static\profile-img\{{ current_user.username }}.jpg" alt=""></div>
+                <div><img class="foto" src="{{ url_for('userava') }}" alt=""></div>
                 <div class="profile-name">{{ current_user.username }}</div>
                 </li>
            </a>
@@ -59,7 +59,7 @@
 
            <a href="{{ url_for('index') }}#{{logged}}">
                 <li class="qq">
-                    <i class="{{ inorout }}"></i>
+                    <i class="{{ in_or_out }}"></i>
                 </li>
             </a>
 
@@ -67,9 +67,121 @@
             </ul>
         </menu>
     </header>
-    <div ></div>
-
     
+    <section class="register">
+        <div id="register" class="loginDialog">
+
+            <div>
+
+                <a id="closeregistr" href="#closelogin" title="Close" class="closelogin">x</a>
+                <div class="login-internal">
+                    <div class="login-internal-span">
+                        <span>Please sign up</span>
+                    </div>
+
+                    <form id="form_registr" action="{{ url_for('index')}}" method="post">
+                        {{ form.hidden_tag() }}
+
+                        <p class="login-p"><span>{{ form.username.label() }}</span> <span>{{ form.username() }}</span></p>
+
+                        <p class="login-p"><span>{{ form.first_name.label() }}</span> <span>{{ form.first_name() }}</span></p>
+                        <p class="login-p"><span>{{ form.last_name.label() }}</span> <span>{{ form.last_name() }}</span></p>
+                        <p class="login-p"><span>{{ form.password.label() }}</span> <span>{{ form.password() }}</span></p>
+                        <p class="login-p"><span>{{ form.confirm_password.label() }}</span> <span>{{ form.confirm_password() }}</span></p>
+                        <p class="login-p"><span>{{ form.email.label() }}</span> <span>{{ form.email() }}</span></p>
+                        <div class="flash-message">
+                        {% with messages = get_flashed_messages() %}
+                           {% if messages %}
+                                 {% for message in messages %}
+                                      <p>{{ message }}</p>
+                                 {% endfor %}
+                           {% endif %}
+                        {% endwith %}
+
+                         <div class="login-internal-sign-in">{{ form.sign_up_submit() }}</div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+
+                          <!-- ------------------login------------------- -->
+<section class="login">
+    <div id="login" class="loginDialog">
+
+        <div>
+
+            <a id="closelogin" href="#closelogin" title="Close" class="closelogin">x</a>
+            <div class="login-internal">
+                <div class="login-internal-span">
+                    <span>Please login</span>
+                </div>
+
+                <form id="form_login" action="{{ url_for('index')}}" method="post">
+                    {{ form.hidden_tag() }}
+
+                    <p class="login-p"><span>{{ form.login_user_name.label() }}</span> <span>{{ form.login_user_name() }}</span></p>
+                    <!-- <span>Error message to do !!!!!</span> -->
+                    <p class="login-p"><span>{{ form.login_password.label() }}</span> <span>{{ form.login_password() }}</span></p>
+
+                    <p class="login-p"><span>{{ form.remember_me.label() }}</span> <span>{{ form.remember_me() }}</span></p>
+
+                    <div class="flash-message">
+                    {% with messages = get_flashed_messages() %}
+                           {% if messages %}
+                                 {% for message in messages %}
+                                      <p>{{ message }}</p>
+                                 {% endfor %}
+                           {% endif %}
+                        {% endwith %}
+                    </div>
+
+                     <div class="login-internal-sign-in">{{ form.login_submit() }}</div>
+                    <a href="{{ url_for('index') }}#register">Register</a>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+                <!--------------------logout----------------------->
+
+    <section class="login">
+    <div id="logout" class="loginDialog">
+
+        <div>
+
+            <a id="closelogout" href="#closelogin" title="Close" class="closelogin">x</a>
+            <div class="login-internal">
+                <div class="login-internal-span">
+                    <span>Are you sure want to logout ?</span>
+                </div>
+
+                <form id="form_logout" action="{{ url_for('logout')}}" method="post">
+                    {{ form.hidden_tag() }}
+
+                    <div class="flash-message">
+                    {% with messages = get_flashed_messages() %}
+                           {% if messages %}
+                                 {% for message in messages %}
+                                      <p>{{ message }}</p>
+                                 {% endfor %}
+                           {% endif %}
+                        {% endwith %}
+                    </div>
+
+                     <div class="login-internal-sign-in">{{ form.logout_submit() }}</div>
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+</section>
     {% endblock %}
 
     {% block main %}
@@ -78,10 +190,12 @@
 
 {% block footer %}
     <footer>
-        <div class="footer-logo">
-            <span id="logo">&#9055;</span>  <span id="logo-text">Game store</span>
-        </div>
-        <div id="copyrights">Copyrights 2021</div>
+        <div class="footer-wrapper">
+            <div class="footer-logo">
+                <span id="logo">&#9055;</span>  <span id="logo-text">Game store</span>
+            </div>
+            <div id="copyrights">Copyrights 2021</div>
+        </div>    
     </footer>
     {% endblock %}
 </body>

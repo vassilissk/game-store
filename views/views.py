@@ -1,8 +1,13 @@
 import sqlite3, os
 from datetime import datetime
 
-import flask
+import flask, numpy
+import cv2
+# from cv2 import cv
 from flask import render_template, url_for, request, redirect, session, flash
+from service.crud_operations import *
+from werkzeug.utils import secure_filename
+
 from setup import app
 from models.models import *
 from test import SomeForm
@@ -11,7 +16,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, UserMixin, current_user, \
     login_required, login_user, logout_user
 
-# login_manager = LoginManager(app)
+login_manager = LoginManager(app)
 login_manager.login_view = '/index#login'
 
 
@@ -28,12 +33,12 @@ print('Hello World ssss')
 def admin():
     return render_template('admin.html')
 
+
 @app.route('/index', methods=["POST", "GET"])
 @app.route('/', methods=["POST", "GET"])
+def index():
 
-def index(user_name=None):
     form = SomeForm()
-    print(current_user.__dict__)
 
     genres = ['strategy', 'adventure', 'action', 'survival', 'rpg', 'rpg']
     selected_genres = dict()
@@ -44,13 +49,14 @@ def index(user_name=None):
         # searching by game name--------------------------------
         if 'search' in request.form:
             search_request = request.form.get('search', False)
-            print(search_request)
+
             games = Game.query.all()
             for game in games:
                 if search_request.lower() in game.name.lower():
                     list_of_games.append(game)
+            in_or_out, logged, show_profile = show_log_in_out()
             return render_template("homepage.html", list_of_games=list_of_games, len=len(list_of_games),
-                                   form=form)
+                                   form=form, in_or_out=in_or_out, logged=logged, show_profile=show_profile)
 
             # -----------------sort by genres ---------------
 
@@ -63,30 +69,26 @@ def index(user_name=None):
                     genre_games = Game.query.filter(Game.genre == genre)
                     for game in genre_games:
                         list_of_games.append(game)
+            in_or_out, logged, show_profile = show_log_in_out()
             return render_template("homepage.html", list_of_games=list_of_games, len=len(list_of_games),
-                                   form=form)
-
-
-            print(selected_genres)
-            print(list_of_games)
+                                   form=form, in_or_out=in_or_out, logged=logged, show_profile=show_profile)
 
             # ----------- login ---------------
 
         if 'login_user_name' in request.form:
 
-            print(request.form)
             username = request.form.get('login_user_name')
             password = request.form.get('login_password')
             remember_me = request.form.get('remember_me')
 
             log_user = db.session.query(User).filter(User.username == username).first()
-            print(log_user.email)
+
             if log_user and check_password_hash(log_user.password, password):
                 login_user(log_user, remember=remember_me)
                 return redirect(url_for('index'))
 
             flash("Invalid username/password", 'error')
-            return redirect(url_for('index'))
+            return redirect('/index#login')
 
             # ------------------------registration------------------------
 
@@ -98,7 +100,7 @@ def index(user_name=None):
             email_list = [user.email for user in users]
 
             if user in user_list:
-                print(f"User {user} already exists")
+
                 flash(f"User {user} already exists")
                 return flask.redirect("/index#register")
 
@@ -117,33 +119,17 @@ def index(user_name=None):
             flash(f"User {user.username} is registered")
             return flask.redirect("/index#login")
 
-
-
-        # if "logout" in request.form:
-        #     print('hello logout')
-        #     logout_user()
-
-
-
     list_of_games = Game.query.all()
-
-    if current_user.is_authenticated:
-        inorout = "fa fa-sign-out"
-        logged = "logout"
-        show_profile = ""
-    else:
-        inorout = "fa fa-sign-in"
-        logged = "login"
-        show_profile = "none"
+    in_or_out, logged, show_profile = show_log_in_out()
 
     return render_template("homepage.html", list_of_games=list_of_games, len=len(list_of_games),
-                           form=form, inorout=inorout, logged=logged, show_profile=show_profile)
+                           form=form, in_or_out=in_or_out, logged=logged, show_profile=show_profile)
 
 
 @app.route('/cart')
 def cart():
-
-    return render_template("cart.html")
+    form = SomeForm()
+    return render_template("cart.html", form=form)
 
 
 @app.route('/game/<game_id>')
@@ -156,12 +142,25 @@ def game(game_id):
 @app.route('/test', methods=["POST", "GET"])
 def test():
     form = SomeForm()
-    print(request.values)
+
     if request.method == 'POST':
         print('hello')
-    #     a = request.form.get('strategy', False)
-    #     print(bool(a))
+        image = request.files['img']
+        avatar = image.read()
+        user = User.query.filter_by(username=current_user.username).first()
+
+        user.avatar = sqlite3.Binary(avatar)
+        db.session.commit()
     return render_template("test.html", form=form)
+
+
+@app.route('/userava')
+@login_required
+def userava():
+    img = current_user.avatar
+    if not img:
+        return url_for('static', filename='default.png')
+    return img
 
 
 @app.route('/index#logout', methods=["POST", "GET"])
@@ -171,3 +170,31 @@ def logout():
     logout_user()
     flash("You have been logged out.")
     return redirect("/index")
+
+
+@app.route('/profile')
+@login_required
+def profile():
+    form = SomeForm()
+    if current_user.is_authenticated:
+        inorout = "fa fa-sign-out"
+        logged = "logout"
+        show_profile = ""
+    else:
+        inorout = "fa fa-sign-in"
+        logged = "login"
+        show_profile = "none"
+    return render_template("profile.html", form=form,
+                           inorout=inorout, logged=logged, show_profile=show_profile)
+
+
+# def show_log_in_out():
+#     if current_user.is_authenticated:
+#         inorout = "fa fa-sign-out"
+#         logged = "logout"
+#         show_profile = ""
+#     else:
+#         inorout = "fa fa-sign-in"
+#         logged = "login"
+#         show_profile = "none"
+#     return inorout, logged, show_profile

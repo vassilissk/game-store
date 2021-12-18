@@ -29,11 +29,11 @@ cxzlvkzvlzcx/lkxzk
 		
 	</div>
 </div>
+<form  action="{{ url_for('test')}}" method="post" enctype="multipart/form-data"> 
+	{{form.upload()}}
+	{{form.upload_submit()}}
+</form>
 
-<script>
-	function func(){		
-		document.getElementById('myform').submit();		
-	}
-</script>
+
 
 {% endblock %}

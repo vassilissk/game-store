@@ -25,8 +25,7 @@ class User(db.Model, UserMixin):
     last_name = db.Column(db.String(80), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(120), unique=False, nullable=False)
-
-    # image = db.Column(db.BLOB)
+    avatar = db.Column(db.BLOB)
 
     def __repr__(self):
         return '<User %r>' % self.username

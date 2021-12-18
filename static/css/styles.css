@@ -1,9 +1,10 @@
 body{color:white;
 background-color: black;
-width: 100vw;
+width: 100%;
 display: flex;
 flex-direction: column;
-align-content: space-around;}
+/* align-content: space-around; */
+justify-content: space-between;}
 
                                            /*             menu                */
 
@@ -15,8 +16,8 @@ align-content: center;}
 menu li{list-style: none;
     background-color: black;
     color: white;
-    padding-left: 2em ;
-    padding-right: 2em;    
+    padding-left: 1.8em ;
+    padding-right: 1.8em;    
     }
 
 menu{
@@ -25,7 +26,9 @@ menu{
     /* border-style: solid;
 border-color: blue; */
 padding: 0;
-width: 99vw;}
+width: 99vw;
+height: 8vh;
+justify-content: center;}
 
  menu ul{
      padding: 0%;
@@ -79,9 +82,28 @@ align-items: center;
     height: 80vh;
     width: 95%;
     background-color: rgb(27, 27, 27);
-    margin: 2vw;
-    overflow-y: scroll;
+    margin-left: 2vw;
+    margin-right: 2vw;
+    overflow-y: scroll;    
+    
     } 
+
+    .main::-webkit-scrollbar {
+        width: 16px;
+      }
+      
+      .main::-webkit-scrollbar-track {
+        background: #154734;
+      }
+      
+      .main::-webkit-scrollbar-thumb {
+          
+         
+        background-color: #f3f0dd;
+        border-radius: 8px;
+        border: 5px solid #154734;
+        
+      }
     
 
 .price-and-button{
@@ -118,12 +140,27 @@ align-items: center;
     font-size: 2vh;
     font-family: Arial, Helvetica, sans-serif;
 }
+
 .wrapper{display: flex;}
-footer{display: flex;
+
+
+.footer-wrapper{display: flex;
     justify-content:space-between;
+    align-items: center;
     padding:  0 5%;
-    margin: 2%;
+    margin: 0;    
 }
+
+/* footer{
+    position: absolute;
+    bottom: 0;
+    left: 10%;
+    right: 10%;
+        
+    display: block;
+    height: 5vh;
+    
+} */
 
 section .game-main{display: block;
     
@@ -257,17 +294,19 @@ border: none;
     /* position: absolute; */
     display: block;
     z-index: 2;
-    /* position: absolute; */
+    
     top: 18%;
-    right: 22%;      
+    right: 22%;    
+    background-color: rgb(86, 88, 90);  
 }
 
 #search-block{
-    width: 50%;
+    width: 20%;
     display: flex;
 	pointer-events: auto;
+    
     align-items:center;
-    flex-direction: column;    
+    flex-direction: row;    
 }
                                                   /*              login                  */
 

@@ -46,3 +46,5 @@ class SomeForm(FlaskForm):
     logout = BooleanField('confirm')
 
     logout_submit = SubmitField('Logout', id='log_out')
+    upload = FileField('file',name='img')
+    upload_submit = SubmitField('Sign up')

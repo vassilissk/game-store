@@ -1,7 +1,14 @@
 import os
 import sqlite3
+
+import flask
 from flask_sqlalchemy import SQLAlchemy
+from flask import render_template, url_for, request, redirect, session, flash
 from setup import app
+from test import SomeForm
+from flask_login import LoginManager, UserMixin, current_user, \
+    login_required, login_user, logout_user
+from models.models import *
 import uuid
 
 database = os.path.join(app.root_path, 'service', 'database.db')
@@ -10,32 +17,114 @@ print(database)
 
 from models.models import User, Game
 
-# db = SQLAlchemy(app)
+
+def show_log_in_out():
+    if current_user.is_authenticated:
+        inorout = "fa fa-sign-out"
+        logged = "logout"
+        show_profile = ""
+    else:
+        inorout = "fa fa-sign-in"
+        logged = "login"
+        show_profile = "none"
+    return inorout, logged, show_profile
 
 
-# class User(db.Model):
-#     __tablename__ = "User"
-#     id = db.Column(db.Integer, primary_key=True)
-#     username = db.Column(db.String(80), unique=True, nullable=False)
-#     email = db.Column(db.String(120), unique=True, nullable=False)
-#
-#     image = db.Column(db.BLOB)
-#
-#     def __repr__(self):
-#         return '<User %r>' % self.username
+def for_index():
+    form = SomeForm()
+
+    genres = ['strategy', 'adventure', 'action', 'survival', 'rpg', 'rpg']
+    selected_genres = dict()
+    if request.method == 'POST':
+
+        list_of_games = []
+
+        # searching by game name--------------------------------
+        if 'search' in request.form:
+            search_request = request.form.get('search', False)
+
+            games = Game.query.all()
+            for game in games:
+                if search_request.lower() in game.name.lower():
+                    list_of_games.append(game)
+            in_or_out, logged, show_profile = show_log_in_out()
+            return render_template("homepage.html", list_of_games=list_of_games, len=len(list_of_games),
+                                   form=form, in_or_out=in_or_out, logged=logged, show_profile=show_profile)
+
+            # -----------------sort by genres ---------------
+
+        if any([genre in request.form for genre in genres]):
+            flash('You were successfully logged in')
+            for genre in genres:
+                selected_genres[genre] = request.form.get(genre, False)
+            for genre in selected_genres:
+                if selected_genres[genre]:
+                    genre_games = Game.query.filter(Game.genre == genre)
+                    for game in genre_games:
+                        list_of_games.append(game)
+            in_or_out, logged, show_profile = show_log_in_out()
+            return render_template("homepage.html", list_of_games=list_of_games, len=len(list_of_games),
+                                   form=form, in_or_out=in_or_out, logged=logged, show_profile=show_profile)
+
+            # ----------- login ---------------
+
+        if 'login_user_name' in request.form:
+
+            username = request.form.get('login_user_name')
+            password = request.form.get('login_password')
+            remember_me = request.form.get('remember_me')
+
+            log_user = db.session.query(User).filter(User.username == username).first()
+
+            if log_user and check_password_hash(log_user.password, password):
+                login_user(log_user, remember=remember_me)
+                return redirect(url_for('index'))
+
+            flash("Invalid username/password", 'error')
+            return redirect('/index#login')
+
+            # ------------------------registration------------------------
+
+        if 'username' in request.form:
+            user = request.form['username']
+            email = request.form['email']
+            users = User.query.all()
+            user_list = [user.username for user in users]
+            email_list = [user.email for user in users]
+
+            if user in user_list:
+
+                flash(f"User {user} already exists")
+                return flask.redirect("/index#register")
+
+            elif email in email_list:
+                flash(f"e-mail {email} already exists")
+                return flask.redirect("/index#register")
+
+            # if request.form['password'] == request.form['confirm_password']
+            hash = generate_password_hash(request.form['password'])
+
+            user = User(username=request.form['username'], first_name=request.form['first_name'],
+                        last_name=request.form['last_name'], password=hash,
+                        email=request.form['email'])
+            db.session.add(user)
+            db.session.commit()
+            flash(f"User {user.username} is registered")
+            return flask.redirect("/index#login")
+
+    list_of_games = Game.query.all()
+    in_or_out, logged, show_profile = show_log_in_out()
+
+    return list_of_games, len(list_of_games), form, in_or_out, logged, show_profile
 
 
 
 
-
-#db.create_all()
-
-
-def convert_to_binary_data(filename):
-    # Convert digital data to binary format
-    with open(filename, 'rb') as file:
-        blobdata = file.read()
-    return blobdata
+# def convert_to_binary_data(filename):
+#     # Convert digital data to binary format
+#     with open(filename, 'rb') as file:
+#         blobdata = file.read()
+#     return blobdata
 
 
 # binary = convert_to_binary_data('D:\Python\\final-internal-project\static\game-img\Red Dead Redemption 2.jpg')
@@ -47,9 +136,12 @@ def convert_to_binary_data(filename):
 # user = User.query.all()
 # print(user[0].username)
 # file = user[0].image
+
 # def blob_to_jpg(file):
-#    with open('D:\Python\\final-internal-project\static\profile-img\\author-image3.jpg', "wb") as fh:
-#        fh.write(file)
+#     with open('D:\Python\\final-internal-project\static\profile-img\\author-image3.jpg', "wb") as fh:
+#         fh.write(file)
+
+
 # blob_to_jpg(file)
 
 # binary = convert_to_binary_data(os.path.join(app.root_path, 'static\\game-img', 'Red Dead Redemption 2.jpg'))
@@ -57,5 +149,4 @@ def convert_to_binary_data(filename):
 # db.session.add(game)
 # db.session.commit()
 
-def show_games():
-    list_of_games = Game.query.all()
+
