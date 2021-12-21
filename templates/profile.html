@@ -31,14 +31,17 @@
                        {% endif %}
                     {% endwith %}
                     </div>
-                    
+                    <div>{{form.profile_submit() }}</div>
+                </form>
             </div> 
-                    <div><img class="profile-foto" src="{{ url_for('userava') }}" alt=""></div>
+                    <div>
+                        <img class="profile-foto" src="{{ url_for('userava') }}" alt="">
+                    </div>
                
             </div>    
-                     <div>{{form.profile_submit() }}</div>
+
                     
-                </form>
+
     </div>       
 </section>
 

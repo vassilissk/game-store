@@ -129,7 +129,7 @@ def game(name):
                           user_id=current_user.id)
         db.session.add(comment)
         db.session.commit()
-        # print(post)
+        return redirect(url_for('game', name=name))
 
     current_game = Game.query.filter(Game.name == name).first()
     print(current_game.id)
@@ -161,9 +161,11 @@ def test():
 @app.route('/userava')
 @login_required
 def userava():
-    img = current_user.avatar
+    if current_user.avatar:
+        # print(current_user.avatar)
+        img = current_user.avatar
 
-    return img
+        return img
 
 
 @app.route('/comment_ava/<user_id>')
@@ -187,6 +189,7 @@ def logout():
 @login_required
 def profile():
     form = SomeForm()
+    print(request.method)
     if request.method == 'POST':
 
         image = request.files['img']
@@ -194,6 +197,7 @@ def profile():
         confirm_password = request.form['profile_confirm_password']
         print(bool(password), bool(confirm_password))
         avatar = image.read()
+        print('reading avatar')
         user = User.query.filter_by(username=current_user.username).first()
         if password and password == confirm_password:
 
@@ -207,9 +211,15 @@ def profile():
         user.first_name = request.form['first_name']
         user.last_name = request.form['last_name']
         db.session.commit()
+        flask.redirect('profile')
     in_or_out, logged, show_profile = show_log_in_out()
     return render_template("profile.html", form=form,
                            in_or_out=in_or_out, logged=logged, show_profile=show_profile)
+
+
+@app.route('/success', methods=["POST", "GET"])
+def success(name):
+    return redirect('/game/<name>')
 
 
 def show_log_in_out():
