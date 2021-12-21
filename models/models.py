@@ -1,6 +1,8 @@
 import datetime
 import os
 
+import flask
+from flask import url_for
 from flask_sqlalchemy import SQLAlchemy
 from setup import app
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -31,19 +33,20 @@ class User(db.Model, UserMixin):
         return '<User %r>' % self.username
 
 
-# class Post(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     title = db.Column(db.String(80), nullable=False)
-#     body = db.Column(db.Text, nullable=False)
-#     pub_date = db.Column(db.DateTime, nullable=False,
-#                          default=datetime.datetime.utcnow())
-#
-#     category_id = db.Column(db.Integer,
-#                             nullable=False)
+class Comment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    comment = db.Column(db.String(600), nullable=False)
+    parent_id = db.Column(db.Integer)
+    pub_date = db.Column(db.DateTime, nullable=False,
+                         default=datetime.datetime.utcnow())
+    children_id = db.Column(db.String(600))
+    game_id = db.Column(db.Integer, nullable=False)
+    author_name = db.Column(db.String(60), default=None, )
+    user_id = db.Column(db.Integer, default=0)
 
-#
-# def __repr__(self):
-#     return '<Post %r>' % self.title
+
+def __repr__(self):
+    return '<Comment %r>' % self.id
 
 
 class Game(db.Model):

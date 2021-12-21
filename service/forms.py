@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import SearchField, SelectField, SubmitField, StringField, FileField, BooleanField, \
-    DateField, DateTimeField, SelectMultipleField, PasswordField, MultipleFileField
+    DateField, DateTimeField, SelectMultipleField, PasswordField, MultipleFileField, TextAreaField
 from wtforms.validators import DataRequired, Email, Length
 
 
@@ -51,3 +51,5 @@ class SomeForm(FlaskForm):
     logout_submit = SubmitField('Logout', id='log_out')
     upload = FileField('Upload avatar', name='img')
     upload_submit = SubmitField('Upload')
+    comment = TextAreaField("Message", validators=[DataRequired()])
+    comment_submit = SubmitField('Submit', id='comment_submit')

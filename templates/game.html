@@ -21,8 +21,45 @@
                  
         </div>
         
-        <hr><p>dghjhgjhgj</p>
+        <hr>
+        <div class="description">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+             Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+             Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
+            Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </div>
+
+        <a href="#add_comment">Add comment</a>
+
+        <div id="add_comment" class="modalDialog">
+            <div>
+                <form action="{{ url_for('game', name=game.name)}}" method="post">
+                    {{ form.hidden_tag() }}
+                    <a href="{{ url_for('game', name=game.name)}}">X</a>
+                    {{ form.comment(value='', vidth=30, height= 8) }}
+                    {{ form.comment_submit() }}
+                </form>
+            </div>
+            
+        </div>
+    {% for comment in comments %}
+
+        <div class="comments">
+            <p class="author"><img class="foto" src={{url_for('comment_ava', user_id=comment.user_id)}} alt=""> {{comment.author_name}}</p>
+            <p class="comment">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+             Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+             Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
+            Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </p>
+            <p class="reply">
+             <a href="#"> reply</a>
+            </p>
+            
+        </div>
+    {% endfor %}
     </section>
+    
     {% endblock %}
 
 

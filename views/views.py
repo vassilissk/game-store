@@ -21,12 +21,6 @@ def load_user(user_id):
 print('Hello World ssss')
 
 
-@app.route('/admin')
-@login_required
-def admin():
-    return render_template('admin.html')
-
-
 @app.route('/index', methods=["POST", "GET"])
 @app.route('/', methods=["POST", "GET"])
 def index():
@@ -106,8 +100,7 @@ def index():
             hash = generate_password_hash(request.form['password'])
 
             user = User(username=request.form['username'], first_name=request.form['first_name'],
-                        last_name=request.form['last_name'], password=hash,
-                        email=request.form['email'])
+                        last_name=request.form['last_name'], password=hash, email=request.form['email'])
             db.session.add(user)
             db.session.commit()
             flash(f"User {user.username} is registered")
@@ -126,14 +119,28 @@ def cart():
     return render_template("cart.html", form=form)
 
 
-@app.route('/game/<name>')
+@app.route('/game/<name>', methods=["POST", "GET"])
 def game(name):
     form = SomeForm()
+    if request.method == 'POST':
+        comment = Comment(comment=request.form['comment'],
+                          game_id=Game.query.filter(Game.name == name).first().id,
+                          author_name=f"{current_user.first_name} {current_user.last_name}",
+                          user_id=current_user.id)
+        db.session.add(comment)
+        db.session.commit()
+        # print(post)
+
     current_game = Game.query.filter(Game.name == name).first()
+    print(current_game.id)
+    comments = Comment.query.filter(Comment.game_id == current_game.id)
+
     in_or_out, logged, show_profile = show_log_in_out()
+    # print(comments)
 
     return render_template("game.html", game=current_game, form=form,
-                           in_or_out=in_or_out, logged=logged, show_profile=show_profile)
+                           in_or_out=in_or_out, logged=logged, show_profile=show_profile,
+                           comments=comments)
 
 
 @app.route('/test', methods=["POST", "GET"])
@@ -155,8 +162,15 @@ def test():
 @login_required
 def userava():
     img = current_user.avatar
-    if not img:
-        return url_for('static', filename='default.png')
+
+    return img
+
+
+@app.route('/comment_ava/<user_id>')
+def comment_ava(user_id):
+    print(user_id)
+    img = User.query.filter_by(id=user_id).first().avatar
+
     return img
 
 

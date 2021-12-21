@@ -159,7 +159,7 @@ align-items: center;
 }
 
 footer{
-    position: absolute;
+    /* position: fixed; */
     bottom: 0;
     left: 0%;
     right: 0%;
@@ -177,7 +177,7 @@ footer{
     justify-content: flex-start;    
     align-items:center;
     width: 90%;
-    height: 80vh;
+    /* height: 80vh; */
     background-color: rgb(27, 27, 27);
     /* padding-top: 2%; */
     }
@@ -186,7 +186,7 @@ footer{
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    height: 80%;
+    /* height: 80%; */
     /* width: 30%; */
     border-color: red;
     border-style: solid;
