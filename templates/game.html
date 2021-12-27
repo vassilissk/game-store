@@ -8,10 +8,8 @@
 {{super()}}
     <section class="game-main">
         <div class="game-wrapper">
-            
-                {% set img = "game-img/" + game.name + ".jpg" %}
-                
-                    <img class="game-foto" src={{url_for('static', filename=img)}} alt="">
+
+                <img class="game-foto" src="{{ url_for('game_image',name=game.name) }}" alt="">
                 
                 <div class="game-name"> {{game.name}} </div>
                 <div class="game-price-and-button">
@@ -22,12 +20,17 @@
         </div>
         
         <hr>
-<!--        <div class="description">-->
-<!--            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.-->
-<!--             Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. -->
-<!--             Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. -->
-<!--            Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.-->
-<!--        </div>-->
+
+        <section class="genres">
+            {% for i in game.genre.split() %}
+            <span class="genre">{{i}}</span>
+            {% endfor %}
+        </section>
+
+        <section class="game-description">
+            {{game.description}}
+        </section>
+
 
         <a href="#add_comment">Add comment</a>
 
@@ -36,21 +39,43 @@
                 <form action="{{ url_for('game', name=game.name)}}" method="post">
                     {{ form.hidden_tag() }}
                     <a href="{{ url_for('game', name=game.name)}}">X</a>
-                    {{ form.comment(value='', vidth=30, height= 8) }}
+                    {{ form.comment(value='') }}
                     {{ form.comment_submit() }}
                 </form>
             </div>
             
         </div>
+
+
+        
     {% for comment in comments %}
 
         <div class="comments">
             <p class="author"><img class="foto" src={{url_for('comment_ava', user_id=comment.user_id)}} alt=""> {{comment.author_name}}</p>
             <p class="comment">
-                {{comment.comment}}
+               {{comment.id}} {{comment.comment}}
+               {% set parent_id = comment.id %}
+
+               <div id="reply" class="modalDialog">
+                
+                <div>
+                    {{comment.id}}
+                    <form action="{{ url_for('reply', name=game.name, parent_id=parent_id)}}" method="post">
+                        {{ form.hidden_tag() }}
+                        <a href="{{ url_for('game', name=game.name)}}">X</a>
+                        {{parent_id}}{{comment.id}}{{ form.comment(value='') }}
+                        {{ form.comment_submit() }}
+                    </form>
+                </div>
+                
+            </div>
+               
             </p>
+            {{parent_id}}
+            
+
             <p class="reply">
-             <a href="#"> reply</a>
+             <a href="#reply"> reply</a>
             </p>
             
         </div>

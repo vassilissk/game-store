@@ -1,4 +1,4 @@
-# from cv2 import cv
+# import schedule, time
 from service.crud_operations import *
 import sqlite3
 from setup import app
@@ -28,38 +28,52 @@ def index():
     res.set_cookie("remember_token", "", expires=0)
     form = SomeForm()
 
-    genres = ['strategy', 'adventure', 'action', 'survival', 'rpg', 'rpg']
+    genres = ['strategy', 'adventure', 'action', 'survival', 'rpg']
     selected_genres = dict()
+    if current_user.is_authenticated and current_user.username == 'admin':
+        admin_display = "flex"
+        games = Game.query.all()
+    else:
+        admin_display = "none"
+        games = Game.query.filter_by(hidden=0)
+    list_of_games = []
     if request.method == 'POST':
-
-        list_of_games = []
 
         # searching by game name--------------------------------
         if 'search' in request.form:
-            search_request = request.form.get('search', False)
-
+            search_request = request.form.get('search')
+            print('Hello', search_request == True)
             games = Game.query.all()
             for game in games:
                 if search_request.lower() in game.name.lower():
                     list_of_games.append(game)
+            if not bool(search_request):
+                list_of_games = [game for game in games if game.hidden == 0]
             in_or_out, logged, show_profile = show_log_in_out()
             return render_template("homepage.html", list_of_games=list_of_games, len=len(list_of_games),
-                                   form=form, in_or_out=in_or_out, logged=logged, show_profile=show_profile)
+                                   form=form, in_or_out=in_or_out, logged=logged,
+                                   admin_display=admin_display, show_profile=show_profile)
 
             # -----------------sort by genres ---------------
 
         if any([genre in request.form for genre in genres]):
-            flash('You were successfully logged in')
+            # flash('You were successfully logged in')
+
             for genre in genres:
                 selected_genres[genre] = request.form.get(genre, False)
+
             for genre in selected_genres:
                 if selected_genres[genre]:
-                    genre_games = Game.query.filter(Game.genre == genre)
-                    for game in genre_games:
-                        list_of_games.append(game)
+                    for game in games:
+                        if genre in game.genre.split():
+                            print(game)
+                            # if game.hidden == 0:
+                            list_of_games.append(game)
+            print(list_of_games)
             in_or_out, logged, show_profile = show_log_in_out()
             return render_template("homepage.html", list_of_games=list_of_games, len=len(list_of_games),
-                                   form=form, in_or_out=in_or_out, logged=logged, show_profile=show_profile)
+                                   form=form, in_or_out=in_or_out, logged=logged,
+                                   admin_display=admin_display, show_profile=show_profile)
 
             # ----------- login ---------------
 
@@ -106,10 +120,14 @@ def index():
             flash(f"User {user.username} is registered")
             return flask.redirect("/index#login")
 
-    list_of_games = Game.query.all()
+    hidden_games = [game for game in Game.query.all() if game.hidden > 0]
+
+    list_of_games = [game for game in Game.query.all() if game.hidden == 0]
+    print(hidden_games)
     in_or_out, logged, show_profile = show_log_in_out()
 
     return render_template("homepage.html", list_of_games=list_of_games, len=len(list_of_games),
+                           admin_display=admin_display, hidden_games=hidden_games,
                            form=form, in_or_out=in_or_out, logged=logged, show_profile=show_profile)
 
 
@@ -123,10 +141,16 @@ def cart():
 def game(name):
     form = SomeForm()
     if request.method == 'POST':
+        if current_user.is_authenticated:
+            author_name = f"{current_user.first_name} {current_user.last_name}"
+            user_id = current_user.id
+        else:
+            author_name = "User"
+            user_id = 1
         comment = Comment(comment=request.form['comment'],
                           game_id=Game.query.filter(Game.name == name).first().id,
-                          author_name=f"{current_user.first_name} {current_user.last_name}",
-                          user_id=current_user.id)
+                          author_name=author_name,
+                          user_id=user_id)
         db.session.add(comment)
         db.session.commit()
         return redirect(url_for('game', name=name))
@@ -141,6 +165,74 @@ def game(name):
     return render_template("game.html", game=current_game, form=form,
                            in_or_out=in_or_out, logged=logged, show_profile=show_profile,
                            comments=comments)
+
+
+@app.route('/add_game', methods=["POST", "GET"])
+@login_required
+def add_game():
+    form = SomeForm()
+
+    if request.method == 'POST':
+        image = request.files['img']
+        name = request.form['add_game_name']
+        description = request.form['add_game_description']
+        game_image = image.read()
+        price = request.form['game_price']
+        genre = request.form['game_genre']
+        game = Game(name=name, description=description, avatar=game_image,
+                    price=price, genre=genre)
+        db.session.add(game)
+        db.session.commit()
+    in_or_out, logged, show_profile = show_log_in_out()
+    return render_template('add_game.html', form=form,
+                           in_or_out=in_or_out, logged=logged, show_profile=show_profile)
+
+
+@app.route('/edit_game/<name>', methods=["POST", "GET"])
+@login_required
+def edit_game(name):
+    form = SomeForm()
+
+    if request.method == 'POST':
+        game = Game.query.filter_by(name=name).first()
+        image = request.files['img']
+        game.name = request.form['add_game_name']
+        game.description = request.form['add_game_description']
+        game.avatar = image.read()
+        game.price = request.form['game_price']
+        game.genre = request.form['game_genre']
+
+        db.session.commit()
+    in_or_out, logged, show_profile = show_log_in_out()
+    game = Game.query.filter_by(name=name).first()
+    return render_template('edit_game.html', form=form, game=game,
+                           in_or_out=in_or_out, logged=logged, show_profile=show_profile)
+
+
+@app.route('/hide_game/<name>', methods=["POST", "GET"])
+@login_required
+def hide_game(name):
+    form = SomeForm()
+
+    game = Game.query.filter_by(name=name).first()
+    game.hidden = 1
+    db.session.commit()
+    # game = Game.query.filter_by(name=name).first()
+    # print('game',game.hidden)
+    return redirect(url_for('index', game=game))
+
+
+@app.route('/restore_game/<name>', methods=["POST", "GET"])
+@login_required
+def restore_game(name):
+    form = SomeForm()
+
+    game = Game.query.filter_by(name=name).first()
+    game.hidden = 0
+    db.session.commit()
+    # game = Game.query.filter_by(name=name).first()
+    # print('game',game.hidden)
+    return redirect(url_for('index', game=game))
 
 
 @app.route('/test', methods=["POST", "GET"])
@@ -168,6 +260,15 @@ def userava():
         return img
 
 
+@app.route('/game_image/<name>')
+def game_image(name):
+    img = Game.query.filter_by(name=name).first().avatar
+    if img:
+        return img
+    else:
+        return Game.query.filter_by(name='default').first().avatar
+
+
 @app.route('/comment_ava/<user_id>')
 def comment_ava(user_id):
     print(user_id)
@@ -189,7 +290,7 @@ def logout():
 @login_required
 def profile():
     form = SomeForm()
-    print(request.method)
+
     if request.method == 'POST':
 
         image = request.files['img']
@@ -220,6 +321,36 @@ def profile():
 @app.route('/success', methods=["POST", "GET"])
 def success(name):
     return redirect('/game/<name>')
+
+
+@app.route('/reply/<name>/<parent_id>', methods=["POST", "GET"])
+def reply(name, parent_id):
+    form = SomeForm()
+    if request.method == 'POST':
+        if current_user.is_authenticated:
+            author_name = f"{current_user.first_name} {current_user.last_name}"
+            user_id = current_user.id
+        else:
+            author_name = "User"
+            user_id = 1
+        comment = Comment(comment=request.form['comment'],
+                          game_id=Game.query.filter(Game.name == name).first().id,
+                          author_name=author_name,
+                          user_id=user_id)
+        db.session.add(comment)
+        db.session.commit()
+        print("parent_id", parent_id)
+        return redirect(url_for('game', name=name))
+
+    current_game = Game.query.filter(Game.name == name).first()
+    # print(current_game.id)
+    comments = Comment.query.filter(Comment.game_id == current_game.id)
+
+    in_or_out, logged, show_profile = show_log_in_out()
+
+    return render_template("game.html", game=current_game, form=form,
+                           in_or_out=in_or_out, logged=logged, show_profile=show_profile,
+                           comments=comments)
 
 
 def show_log_in_out():

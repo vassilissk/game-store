@@ -162,17 +162,7 @@
                 </div>
 
                 <form id="form_logout" action="{{ url_for('logout')}}" method="post">
-                    {{ form.hidden_tag() }}
-
-                    <div class="flash-message">
-                    {% with messages = get_flashed_messages() %}
-                           {% if messages %}
-                                 {% for message in messages %}
-                                      <p>{{ message }}</p>
-                                 {% endfor %}
-                           {% endif %}
-                        {% endwith %}
-                    </div>
+                    {{ form.hidden_tag() }}                    
 
                      <div class="login-internal-sign-in">{{ form.logout_submit() }}</div>
 

@@ -8,10 +8,10 @@
 {% block main %}
 
 <section class="main">
-                             <!-- !-- ------------------sort  by categories------------------- -->
-<section class="sort">
+                             <!-- !-- ------------------search------------------- -->
+<div class="sort">
     <div class="add-genre-search">
-        <a href="#openModal" class="add-genre">+ Add Genre</a>
+        <a href="#openModal" class="add-genre">Sort by genres</a>
 
         <div id="search-block">
             <i class="fa fa-search" id="glass" onclick="search_for_game()"></i>
@@ -25,6 +25,8 @@
 
         </form>
     </div>
+
+                            <!-- !-- ------------------sort  by categories------------------- -->
 <div id="openModal" class="modalDialog">
 	<div>
 		<a id="closeModal" href="#closeModal" title="Close" class="close" onclick="func()"></a>
@@ -49,9 +51,9 @@
 		</form>
 
 	</div>
+   
 </div>
-
-<script>
+ <script>
 	function func(){
 		document.getElementById('myform').submit();
 	}
@@ -60,8 +62,23 @@
         document.getElementById('search').submit();
     }
 
+    function add_game(){
+        document.getElementById('add_game').submit();
+    }
+
 </script>
-</section>
+                                             <!-- !-- ------------------Add new game------------------- -->
+<div class="add_game_wrapper" style="display:{{admin_display}}">
+    <div class="add_game" name=add_game  onclick="add_game()">
+        <form  action="{{ url_for('index')}}" method="post">
+            <a id="add_game" href="{{url_for('add_game')}}">Add game</a>
+        </form>
+    </div>
+</div>
+
+
+
+</div>
 
                                        <!-- ------------------ main section of games------------------ -->
     {% for i in range(0,len,3) %}
@@ -71,10 +88,9 @@
             {% if list_of_games[j] %}
 
                 <article class="game-in-list">
-                    {% set img = "game-img/" + list_of_games[j].name + ".jpg" %}
 
                     <a href="{{ url_for('game', name=list_of_games[j].name) }}">
-                        <img class="game-foto" src={{url_for('static', filename=img)}} alt="">
+                        <img class="game-foto" src="{{ url_for('game_image',name=list_of_games[j].name) }}" alt="">
                     </a>
                     <div class="price-and-button">
                         <span>${{list_of_games[j].price}}</span>
@@ -83,14 +99,67 @@
                             <input type="submit" class="buy-btn" value="Buy">
                             </form>
                     </div>
-                    <div class="genre">{{list_of_games[j].genre}}</div>
+                    {% for i in list_of_games[j].genre.split() %}
+                        <span class="genre">{{i}}</span>
+                    {% endfor %}
+                    
                     <div class="game-name">{{list_of_games[j].name}}</div>
+
+                    <div class="game-in-list-admin" style="display:{{admin_display}}">
+                        <div class="game-in-list-admin-wrapper">
+                            <a href="{{url_for('edit_game', name=list_of_games[j].name)}}"><i class="fa fa-edit"></i><span>Edit game</span></a>
+                            <a href="{{url_for('hide_game', name=list_of_games[j].name)}}"><i class="fa fa-trash"></i><span>Delete game</span></a>
+                        </div>
+
+                    </div>
                 </article>
+                
             {% endif %}
         {% endfor %}
     </div>
     {% endfor %}
+</section>
 
+<section class="main" style="display:{{admin_display}}">
+<h1>Hidden games</h1>
+
+{% for i in range(0,len,3) %}
+
+    <div class="wrapper">
+        {% for j in range(i,i+3) %}
+            {% if hidden_games[j] %}
+
+                <article class="game-in-list">
+
+                    <a href="{{ url_for('game', name=hidden_games[j].name) }}">
+                        <img class="game-foto" src="{{ url_for('game_image',name=hidden_games[j].name) }}" alt="">
+                    </a>
+                    <div class="price-and-button">
+                        <span>${{hidden_games[j].price}}</span>
+                        
+                        <form  method='post'>
+                            <input type="submit" class="buy-btn" value="Buy">
+                            </form>
+                    </div>
+                    {% for i in hidden_games[j].genre.split() %}
+                        <span class="genre">{{i}}</span>
+                    {% endfor %}
+                    
+                    <div class="game-name">{{hidden_games[j].name}}</div>
+
+                    <div class="game-in-list-admin" style="display:{{admin_display}}">
+                        <div class="game-in-list-admin-wrapper">
+                            <a href="{{url_for('edit_game', name=hidden_games[j].name)}}"><i class="fa fa-edit"></i><span>Edit game</span></a>
+                            <a href="{{url_for('restore_game', name=hidden_games[j].name)}}"><i class="fa fa-trash"></i><span>Restore game</span></a>
+                        </div>
+
+                    </div>
+                </article>
+                
+            {% endif %}
+        {% endfor %}
+    </div>
+    {% endfor %}
 
 </section>
 {% endblock %}

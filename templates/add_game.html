@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block menu %}
+{{super()}}
+{% endblock %}
+
+{% block main %}
+<h1> Add new game</h1>
+<section >
+    <div class="profile-wrapper">
+            <div class="profile">
+                <div>
+                <form  action="{{ url_for('add_game')}}" method="post" enctype="multipart/form-data">
+                    {{ form.hidden_tag() }}
+
+                    <p class="profile-p"><span>{{ form.add_game_name.label() }}</span>
+                         <span>{{ form.add_game_name() }}</span></p>
+                    <p class="profile-p"><span>{{ form.add_game_description.label() }}</span>
+                       <span>{{ form.add_game_description() }}</span></p>
+                    <p class="profile-p"><span>{{ form.game_price.label() }}</span>
+                       <span>{{ form.game_price() }}</span></p>
+                    <p class="profile-p"><span>{{ form.game_genre.label() }}</span>
+                       <span>{{ form.game_genre() }}</span></p>
+
+                    
+
+                    {{form.upload_game_image.label()}} {{form.upload_game_image()}}	
+
+                    {{name}}
+                    <div>{{form.profile_submit() }}</div>
+                </form>
+            </div> 
+                    <div>
+                        <img class="profile-foto" src="{{ url_for('game_image',name=name) }}" alt="">
+                    </div>
+               
+            </div>    
+
+                    
+
+    </div>       
+</section>
+
+
+ 
+{% endblock %}
+
+{% block footer %}
+{{super()}}
+    {% endblock %}

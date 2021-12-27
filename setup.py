@@ -1,3 +1,4 @@
+import threading, schedule, time
 from flask import Flask
 from datetime import timedelta
 from flask_sqlalchemy import SQLAlchemy
@@ -20,4 +21,8 @@ from views.views import *
 app.secret_key = 'the random string'
 
 if __name__ == "__main__":
+
     app.run()
+
+
+

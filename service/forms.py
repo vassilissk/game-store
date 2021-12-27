@@ -53,3 +53,10 @@ class SomeForm(FlaskForm):
     upload_submit = SubmitField('Upload')
     comment = TextAreaField("Message", validators=[DataRequired()])
     comment_submit = SubmitField('Submit', id='comment_submit')
+
+    add_game_submit = SubmitField('Add new game', id='add_new_game')
+    add_game_name = StringField('Name',validators=[DataRequired()])
+    add_game_description = TextAreaField("Description", validators=[DataRequired()])
+    upload_game_image = FileField('Upload image', name='img')
+    game_price = StringField('Price', validators=[DataRequired()])
+    game_genre = StringField('Genre',validators=[DataRequired()])
