@@ -50,8 +50,9 @@ def index():
             if not bool(search_request):
                 list_of_games = [game for game in games if game.hidden == 0]
             in_or_out, logged, show_profile = show_log_in_out()
+            hidden_games = [game for game in Game.query.all() if game.hidden > 0]
             return render_template("homepage.html", list_of_games=list_of_games, len=len(list_of_games),
-                                   form=form, in_or_out=in_or_out, logged=logged,
+                                   form=form, in_or_out=in_or_out, logged=logged, hidden_games=hidden_games,
                                    admin_display=admin_display, show_profile=show_profile)
 
             # -----------------sort by genres ---------------
@@ -65,14 +66,15 @@ def index():
             for genre in selected_genres:
                 if selected_genres[genre]:
                     for game in games:
-                        if genre in game.genre.split():
+                        if genre in game.genre.split() and game.hidden == 0:
                             print(game)
                             # if game.hidden == 0:
                             list_of_games.append(game)
             print(list_of_games)
             in_or_out, logged, show_profile = show_log_in_out()
+            hidden_games = [game for game in Game.query.all() if game.hidden > 0]
             return render_template("homepage.html", list_of_games=list_of_games, len=len(list_of_games),
-                                   form=form, in_or_out=in_or_out, logged=logged,
+                                   form=form, in_or_out=in_or_out, logged=logged, hidden_games=hidden_games,
                                    admin_display=admin_display, show_profile=show_profile)
 
             # ----------- login ---------------
