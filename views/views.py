@@ -1,7 +1,7 @@
 # import schedule, time
 from service.crud_operations import *
 import sqlite3
-from setup import app
+from setup import app, session
 from models.models import *
 from service.forms import SomeForm
 
@@ -24,6 +24,12 @@ print('Hello World ssss')
 @app.route('/index', methods=["POST", "GET"])
 @app.route('/', methods=["POST", "GET"])
 def index():
+    if 'cart' in session:
+        print('cart in session')
+        pass
+    else:
+        session['cart'] = []
+
     res = flask.make_response()
     res.set_cookie("remember_token", "", expires=0)
     form = SomeForm()
@@ -65,14 +71,15 @@ def index():
             for genre in selected_genres:
                 if selected_genres[genre]:
                     for game in games:
-                        if genre in game.genre.split():
+                        if genre in game.genre.split() and game.hidden == 0:
                             print(game)
                             # if game.hidden == 0:
                             list_of_games.append(game)
+            hidden_games = [game for game in Game.query.all() if game.hidden > 0]
             print(list_of_games)
             in_or_out, logged, show_profile = show_log_in_out()
             return render_template("homepage.html", list_of_games=list_of_games, len=len(list_of_games),
-                                   form=form, in_or_out=in_or_out, logged=logged,
+                                   form=form, in_or_out=in_or_out, logged=logged, hidden_games=hidden_games,
                                    admin_display=admin_display, show_profile=show_profile)
 
             # ----------- login ---------------
@@ -87,6 +94,7 @@ def index():
 
             if log_user and check_password_hash(log_user.password, password):
                 login_user(log_user, remember=remember_me)
+                session['cart'].clear()
                 return redirect(url_for('index'))
 
             flash("Invalid username/password", 'error')
@@ -134,6 +142,7 @@ def index():
 @app.route('/cart')
 def cart():
     form = SomeForm()
+    print('kjkjhlkjhlkhkjhlkj',session['cart'])
     return render_template("cart.html", form=form)
 
 
@@ -282,6 +291,7 @@ def comment_ava(user_id):
 def logout():
     print("helloooooooooooooooooo")
     logout_user()
+    session['cart'].clear()
     flash("You have been logged out.")
     return redirect("/index")
 
@@ -351,6 +361,16 @@ def reply(name, parent_id):
     return render_template("game.html", game=current_game, form=form,
                            in_or_out=in_or_out, logged=logged, show_profile=show_profile,
                            comments=comments)
+
+
+@app.route('/add_to_cart/<name>', methods=["POST", "GET"])
+def add_to_cart(name):
+    if request.method == 'POST':
+        if not name in session['cart']:
+            session['cart'].append(name)
+            session.modified = True
+        print(session)
+        return redirect('/index')
 
 
 def show_log_in_out():

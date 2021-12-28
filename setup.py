@@ -1,5 +1,5 @@
 import threading, schedule, time
-from flask import Flask
+from flask import Flask, session
 from datetime import timedelta
 from flask_sqlalchemy import SQLAlchemy
 from flask_admin import Admin
