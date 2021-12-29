@@ -80,7 +80,7 @@ def index():
             print(list_of_games)
             in_or_out, logged, show_profile = show_log_in_out()
             hidden_games = [game for game in Game.query.all() if game.hidden > 0]
-            return render_template("homepage.html", list_of_games=list_of_games, len=len(list_of_games),
+            return render_template("homepage.html", list_of_games=list_of_games, length=len(list_of_games),
                                    form=form, in_or_out=in_or_out, logged=logged, hidden_games=hidden_games,
                                    admin_display=admin_display, show_profile=show_profile)
 
@@ -154,9 +154,9 @@ def cart():
     for item in session['cart']:
         game_in_cart = Game.query.filter(Game.name == item).first()
         game_in_cart_list.append(game_in_cart)
-        cart_games_amount = sum(session['cart'].values()) if \
-            len(session['cart']) and sum(session['cart'].values()) else ''
-        in_or_out, logged, show_profile = show_log_in_out()
+    cart_games_amount = sum(session['cart'].values()) if \
+        len(session['cart']) and sum(session['cart'].values()) else ''
+    in_or_out, logged, show_profile = show_log_in_out()
     return render_template("cart.html", form=form, game_in_cart_list=game_in_cart_list,
                            cart_games_amount=cart_games_amount, in_or_out=in_or_out,
                            logged=logged, show_profile=show_profile)
