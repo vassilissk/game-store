@@ -202,10 +202,11 @@ align-items: center;
 }
 
 footer{
-    /* position: fixed; */
+    background-color: black;
+    position: fixed;
     bottom: 0;
-    left: 0%;
-    right: 0%;
+    /* left: 0%;
+    right: 0%; */
         
     display: block;
     height: 8vh;
@@ -511,4 +512,62 @@ justify-content: center;
 #add_game, #add_game:visited{
     text-decoration: none;
     color: white;
+}
+
+.cart-main{
+    width: 80%;
+    /* border: 1px solid white; */
+    background-color: rgb(27, 27, 27) ;
+}
+.cart-item{
+    border: 2px solid black;
+    padding: 2%;
+    margin: 2%;
+    display: flex;
+    align-items: center;
+}
+.cart-item-name-price{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+}
+.cart-item-name-price span{
+    font-size: 2em;
+}
+.add-and-sub form{
+display: flex;
+justify-content: space-around;
+}
+
+.add-and-sub{
+    display: flex;
+    flex-direction: row;
+    font-size: 2em;
+    justify-content: space-around;
+    align-items: stretch;
+    width: 16%;
+    height: 1.4em;
+    border-radius: 0.7em;
+    border: none;
+    color: white;
+    background-color: rgb(45, 153, 45);
+    margin: 2%;
+}
+.cart-form{
+    width: 60%;
+    background-color: rgb(45, 153, 45);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    font-size: 1em;
+    color: white;
+    border: none;
+    padding: 2% 10%;
+    border-radius: 0.7em;
+}
+
+.cart-game-foto{
+    height: 10vh;
 }

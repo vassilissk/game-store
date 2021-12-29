@@ -28,7 +28,7 @@ def index():
         print('cart in session')
         pass
     else:
-        session['cart'] = []
+        session['cart'] = {}
 
     res = flask.make_response()
     res.set_cookie("remember_token", "", expires=0)
@@ -136,16 +136,41 @@ def index():
     print(hidden_games)
     in_or_out, logged, show_profile = show_log_in_out()
 
-    return render_template("homepage.html", list_of_games=list_of_games, len=len(list_of_games),
+    cart_games_amount = sum(session['cart'].values()) if len(session['cart']) else ''
+
+    return render_template("homepage.html", list_of_games=list_of_games, length=len(list_of_games),
                            admin_display=admin_display, hidden_games=hidden_games,
-                           form=form, in_or_out=in_or_out, logged=logged, show_profile=show_profile)
+                           form=form, in_or_out=in_or_out, logged=logged, show_profile=show_profile,
+                           cart_games_amount=cart_games_amount)
 
 
-@app.route('/cart')
+@app.route('/cart', methods=["POST", "GET"])
 def cart():
     form = SomeForm()
-    print('kjkjhlkjhlkhkjhlkj',session['cart'])
-    return render_template("cart.html", form=form)
+    game_in_cart_list = []
+    if request.method == "POST":
+        print("Hello", request.form)
+
+    for item in session['cart']:
+        game_in_cart = Game.query.filter(Game.name == item).first()
+        game_in_cart_list.append(game_in_cart)
+        cart_games_amount = sum(session['cart'].values()) if len(session['cart']) and \
+                                                             sum(session['cart'].values()) else ''
+    return render_template("cart.html", form=form, game_in_cart_list=game_in_cart_list,
+                           cart_games_amount=cart_games_amount)
+
+
+@app.route('/cart_plus_minus/<name>', methods=["POST", "GET"])
+def cart_plus_minus(name):
+    if request.method == "POST":
+        if "cart_add" in request.form:
+            session['cart'][name] += 1
+        elif "cart_sub" in request.form:
+            session['cart'][name] -= 1
+        if session['cart'][name] < 0:
+            session['cart'][name] = 0
+        session.modified = True
+    return redirect("/cart")
 
 
 @app.route('/game/<name>', methods=["POST", "GET"])
@@ -368,9 +393,12 @@ def reply(name, parent_id):
 @app.route('/add_to_cart/<name>', methods=["POST", "GET"])
 def add_to_cart(name):
     if request.method == 'POST':
-        if not name in session['cart']:
-            session['cart'].append(name)
-            session.modified = True
+        if name in session['cart']:
+            session['cart'][name] += 1
+
+        else:
+            session['cart'][name] = 1
+        session.modified = True
         print(session)
         return redirect('/index')
 

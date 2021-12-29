@@ -49,7 +49,7 @@ class SomeForm(FlaskForm):
     logout = BooleanField('confirm')
 
     logout_submit = SubmitField('Logout', id='log_out')
-    upload = FileField('Upload avatar', name='img')
+    upload = FileField('Upload avatar')
     upload_submit = SubmitField('Upload')
     comment = TextAreaField("Message", validators=[DataRequired()])
     comment_submit = SubmitField('Submit', id='comment_submit')
@@ -57,6 +57,8 @@ class SomeForm(FlaskForm):
     add_game_submit = SubmitField('Add new game', id='add_new_game')
     add_game_name = StringField('Name',validators=[DataRequired()])
     add_game_description = TextAreaField("Description", validators=[DataRequired()])
-    upload_game_image = FileField('Upload image', name='img')
+    upload_game_image = FileField('Upload image')
     game_price = StringField('Price', validators=[DataRequired()])
     game_genre = StringField('Genre',validators=[DataRequired()])
+    cart_add = SubmitField()
+    cart_sub = SubmitField()
