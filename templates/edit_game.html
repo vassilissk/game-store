@@ -16,7 +16,7 @@
                          <span>{{ form.add_game_name(value=game.name) }}</span></p>
                     <p class="profile-p"><span>{{ form.add_game_description.label() }}</span>
 
-                       <span>{{ form.add_game_description() }}</span></p>
+                       <span>{{ form.add_game_description(rows=5 ) }}</span></p>
                     <p class="profile-p"><span>{{ form.game_price.label() }}</span>
                        <span>{{ form.game_price(value=game.price) }}</span></p>
                     <p class="profile-p"><span>{{ form.game_genre.label() }}</span>

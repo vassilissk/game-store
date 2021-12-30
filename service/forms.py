@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import  SelectField, SubmitField, StringField, FileField, BooleanField, \
     DateField, DateTimeField, SelectMultipleField, PasswordField, MultipleFileField, TextAreaField
 from wtforms.validators import DataRequired, Email, Length
-
+from wtforms.widgets import TextArea
 
 class SomeForm(FlaskForm):
     # search=SearchField('Search')
@@ -56,7 +56,7 @@ class SomeForm(FlaskForm):
 
     add_game_submit = SubmitField('Add new game', id='add_new_game')
     add_game_name = StringField('Name',validators=[DataRequired()])
-    add_game_description = TextAreaField("Description", validators=[DataRequired()])
+    add_game_description = TextAreaField('Description')
     upload_game_image = FileField('Upload image')
     game_price = StringField('Price', validators=[DataRequired()])
     game_genre = StringField('Genre',validators=[DataRequired()])
