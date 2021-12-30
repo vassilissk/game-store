@@ -24,14 +24,14 @@ from views.views import *
 app.secret_key = 'the random string'
 
 
-def sensor():
-    """ Function for test purposes. """
-    print("Scheduler is alive!")
-
-
-sched = BackgroundScheduler(daemon=True)
-sched.add_job(sensor, 'interval', days=1)
-sched.start()
+# def sensor():
+#     """ Function for test purposes. """
+#     print("Scheduler is alive!")
+#
+#
+# sched = BackgroundScheduler(daemon=True)
+# sched.add_job(sensor, 'interval', days=1)
+# sched.start()
 
 if __name__ == "__main__":
     app.run()

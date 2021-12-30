@@ -72,7 +72,7 @@ def index():
             for genre in selected_genres:
                 if selected_genres[genre]:
                     for game in games:
-                        if genre in game.genre.split() and game.hidden == 0:
+                        if genre in game.genre.lower().split() and game.hidden == 0:
                             print(game)
                             # if game.hidden == 0:
                             list_of_games.append(game)
@@ -211,7 +211,7 @@ def add_game():
     form = SomeForm()
 
     if request.method == 'POST':
-        image = request.files['img']
+        image = request.files['upload_game_image']
         name = request.form['add_game_name']
         description = request.form['add_game_description']
         game_image = image.read()
@@ -233,10 +233,12 @@ def edit_game(name):
 
     if request.method == 'POST':
         game = Game.query.filter_by(name=name).first()
-        image = request.files['img']
+        image = request.files['upload_game_image']
         game.name = request.form['add_game_name']
         game.description = request.form['add_game_description']
-        game.avatar = image.read()
+        if image:
+            game.avatar = image.read()
+
         game.price = request.form['game_price']
         game.genre = request.form['game_genre']
 
@@ -332,7 +334,7 @@ def profile():
 
     if request.method == 'POST':
 
-        image = request.files['img']
+        image = request.files['upload']
         password = request.form['profile_password']
         confirm_password = request.form['profile_confirm_password']
         print(bool(password), bool(confirm_password))
