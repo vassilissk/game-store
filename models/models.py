@@ -4,9 +4,11 @@ import os
 import flask
 from flask import url_for
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import ForeignKey
+
 from setup import app
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import LoginManager, UserMixin,current_user
+from flask_login import LoginManager, UserMixin, current_user
 
 login_manager = LoginManager(app)
 
@@ -60,6 +62,26 @@ class Game(db.Model):
 
     def __repr__(self):
         return '<Game %r>' % self.name
+
+
+class Customer(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    first_name = db.Column(db.String(50), nullable=False)
+    last_name = db.Column(db.String(50), nullable=False)
+    email = db.Column(db.String(120), nullable=False)
+    phone = db.Column(db.String(20), nullable=False)
+    payment_type = db.Column(db.String(20), nullable=False)
+    comment = db.Column(db.String(600), nullable=True)
+    date_of_order = db.Column(db.String, nullable=False)
+
+
+class Order(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    game = db.Column(db.String(50), nullable=False)
+    price = db.Column(db.Float, nullable=False)
+    amount = db.Column(db.Integer)
+    total = db.Column(db.Float, nullable=False)
+    user_id = db.Column(db.Integer, ForeignKey(Customer.id))
 
 # me = User(username='admin', email='adminwq@example.com')
 # db.session.add(me)

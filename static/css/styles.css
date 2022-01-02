@@ -1,11 +1,17 @@
+:root {
+    --main-bg-color: rgb(53, 53, 53);
+  }
+
 body{color:white;
 background-color: black;
-width: 100%;
+width: 100vw;
 display: flex;
 flex-direction: column;
 /* align-content: space-around; */
 justify-content: space-between;
-align-items: center;}
+align-items: center;
+font-family: Arial, Helvetica, sans-serif;
+}
 
                                            /*             menu                */
 
@@ -43,7 +49,7 @@ border-color: yellow; */
 
  menu li:hover
 {
-    background-color: cadetblue;
+    /* background-color: cadetblue; */
     text-decoration: underline;
     color: lightgrey;
 }
@@ -72,8 +78,8 @@ align-items: center;
     align-items:center;
     justify-content: start;
       margin: 4%;
-      width: 23%;
-      height: 80%;
+      width: 300px;
+      height: 500px;
       position: relative;
       }
 
@@ -83,18 +89,20 @@ align-items: center;
       height: 100%;
       z-index: 2;
       position: absolute;
-      top: 0;
+      bottom: 0;
       opacity: 0;
       justify-content: center;
     align-items: center;
 }
 
 .game-in-list-admin:hover {
+    height: 80%;
     background-color: rgba(255, 255, 255, 0.8);
     opacity: 1;
 }
 
 .game-in-list-admin-wrapper{
+    
     flex-direction: column;
     display: flex;
     justify-content: center;
@@ -126,29 +134,34 @@ align-items: center;
     flex-direction: column;
     height: 80vh;
     width: 95%;
-    background-color: rgb(27, 27, 27);
+    background-color: var(--main-bg-color);
     margin-left: 2vw;
     margin-right: 2vw;
     overflow-y: scroll;
+    /* position: fixed;
+    bottom: 8vh; */
     /* align-items: center ;     */
     
     } 
 
-    .main::-webkit-scrollbar {
+    .main::-webkit-scrollbar,.cart-main::-webkit-scrollbar,
+    .order-main::-webkit-scrollbar,.game-main::-webkit-scrollbar {
         width: 16px;
       }
       
-      .main::-webkit-scrollbar-track {
-        background: rgb(27, 27, 27);
+      .main::-webkit-scrollbar-track, .cart-main::-webkit-scrollbar-track,
+      .order-main::-webkit-scrollbar, .game-main::-webkit-scrollbar-track {
+        background: var(--main-bg-color);
       }
       
-      .main::-webkit-scrollbar-thumb {
+      .main::-webkit-scrollbar-thumb, .cart-main::-webkit-scrollbar-thumb,
+      .order-main::-webkit-scrollbar-thumb, .game-main::-webkit-scrollbar-thumb {
           
          
         background-color: #f3f0dd;
         border-radius: 8px;
-        border: 5px solid rgb(27, 27, 27);
-        height: 50px;
+        border: 5px solid var(--main-bg-color);
+        height: 20px;
         
       }
     
@@ -158,15 +171,15 @@ align-items: center;
     justify-content:space-between;
     align-items:center;
     
-    font-size: 100%;
-    font-family: Arial, Helvetica, sans-serif;
+    font-size: 2em;
+    /* font-family: Arial, Helvetica, sans-serif; */
     margin: 3%;
     margin-top: 2%;
 }
 
 .buy-btn {
     display: block;
-    height: 100%;width: 100%;
+    height: 2em;width: 6em;
     border-radius: 5%;
     background-color: rgb(45, 153, 45);
     border-style: none;}
@@ -180,7 +193,7 @@ align-items: center;
 
 .genre{
     font-size: 2vh;
-    font-family: Arial, Helvetica, sans-serif;
+    /* font-family: Arial, Helvetica, sans-serif; */
     background-color: rgb(75, 164, 236) ;
     border-radius: 0.5em;
     padding: 2px 5px;
@@ -188,7 +201,7 @@ align-items: center;
 
 .game-name{
     font-size: 2vh;
-    font-family: Arial, Helvetica, sans-serif;
+    /* font-family: Arial, Helvetica, sans-serif; */
 }
 
 
@@ -198,7 +211,8 @@ align-items: center;
     justify-content:space-between;
     align-items: center;
     padding:  0 5%;
-    margin: 0;    
+    margin: 0; 
+       width: 100vw;
 }
 
 footer{
@@ -208,23 +222,27 @@ footer{
     /* left: 0%;
     right: 0%; */
         
-    display: block;
+    display: flex;
     height: 8vh;
-    width: 100%;
+    
     
 }
 
 .game-main{display: flex;
     flex-direction: column;
-    border-color: green;
-    border-style: solid;
+    /* border-color: green;
+    border-style: solid; */
     justify-content: flex-start;    
     align-items:center;
     width: 90%;
     /* height: 80%;
     height: 80vh; */
-    background-color: rgb(27, 27, 27);
+    background-color: var(--main-bg-color);
     /* padding-top: 2%; */
+    position: fixed;
+    bottom: 8vh;
+    overflow-y: scroll;
+    height: 80%;
     }
 
 .game-wrapper{
@@ -233,8 +251,8 @@ footer{
     justify-content: flex-end;
     /* height: 80%; */
     /* width: 30%; */
-    border-color: red;
-    border-style: solid;
+    /* border-color: red;
+    border-style: solid; */
     
     
 }
@@ -271,7 +289,7 @@ hr{
 
 .modalDialog {
 	position: absolute;
-	font-family: Arial, Helvetica, sans-serif;
+	/* font-family: Arial, Helvetica, sans-serif; */
 	top: 0;
 	right: 0;
 	bottom: 0;
@@ -386,7 +404,7 @@ border: none;
 
 .loginDialog {
 	position: absolute;
-	font-family: Arial, Helvetica, sans-serif;
+	/* font-family: Arial, Helvetica, sans-serif; */
 	top: 0;
 	right: 0;
 	bottom: 0;
@@ -470,11 +488,13 @@ justify-content: center;
 
 .profile{
     display: flex;
-    width: 50vw;
-    /* border: 1px solid red; */
-    display: flex;
+    /* border: 1px solid green; */
+    width: 50%;
+    /* flex-direction: column; */
+    /* display: flex; */
     justify-content: space-between;
     align-items: center;
+    flex-direction: column;
 }
 .profile-foto{
     height: 30vh;
@@ -483,18 +503,22 @@ justify-content: center;
 .profile-p{
     display: flex;
     justify-content: space-between;
-    width: 90%;
+    align-items: center;
+    width: 110%;
 }
 .profile-wrapper{
-    flex-direction: column;
+    width: 60vw;
+    /* border: 1px solid red; */
+    /* flex-direction: column; */
     display: flex;
-    justify-content: center;
+    
+    justify-content: space-between;
     align-items: center;
 }
-.add_game_wrapper{
+.admin_panel{
     display: flex;
-    justify-content: flex-end;
-    padding-right: 10%;
+    justify-content: space-around;
+    /* padding-right: 10%; */
 }
 
 .add_game{
@@ -509,31 +533,42 @@ justify-content: center;
     cursor: pointer;
 }
 
-#add_game, #add_game:visited{
+ #cart-del-item, #cart-del-item:visited,.before-main div a:visited,
+.before-main div a, .confirm-button, .confirm-order-button, 
+.add_game, .add_game:visited, .customer, .customer:visited{
     text-decoration: none;
     color: white;
 }
 
 .cart-main{
     width: 80%;
-    /* border: 1px solid white; */
-    background-color: rgb(27, 27, 27) ;
+    
+    background-color: var(--main-bg-color) ;
+    position: fixed;
+    bottom: 8vh;
+    overflow-y: scroll;
+    height: 75%;
+    
+    
 }
 .cart-item{
     border: 2px solid black;
     padding: 2%;
     margin: 2%;
     display: flex;
+    justify-content: space-between;
     align-items: center;
+    
 }
 .cart-item-name-price{
     display: flex;
     flex-direction: column;
     align-items: center;
-    
+    width: 40%;
+    font-size: 1.5em;
 }
 .cart-item-name-price span{
-    font-size: 2em;
+    font-size: 1.5em;
 }
 .add-and-sub form{
 display: flex;
@@ -570,4 +605,99 @@ justify-content: space-around;
 
 .cart-game-foto{
     height: 10vh;
+}
+
+.cart-del-item{
+    font-size: 4em;    
+}
+
+.before-main{
+    width: 80%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 2em;
+    margin: 1%;
+}
+
+.before-main div{
+    
+    width: 35%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.confirm-button{
+    background-color: rgb(45, 153, 45);
+    padding: 2% 6%;
+    /* font-size: 0.3em; */
+    text-decoration: none;
+    border-radius: 2px;
+    font-size: 0.5em;
+}
+
+.confirm-order-button{
+    background-color: rgb(45, 153, 45);
+    padding: 2% 6%;
+    /* font-size: 0.3em; */
+    text-decoration: none;
+    border-radius: 2px;
+    font-size: 1em;
+    margin: 5px;
+}
+
+.complete_order_form{
+    /* width: 150%; */
+    /* border: 1px solid white; */
+    display: flex;
+    flex-direction: column;
+    /* font-size: 2em; */
+}
+.complete_order_form span{
+    margin: 0.5vh;
+}
+.complete_order_form_wrapper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+}
+
+.customer div{
+display: flex;
+justify-content: flex-start;
+/* */
+width: 99vw;
+height: 5vh;
+align-items: center;
+}
+.customer:nth-child(odd){
+    background-color: var(--main-bg-color);
+}
+
+.order-p{
+    display: flex;
+    width: 500px;
+    justify-content: space-between; 
+    
+}
+.order-p-game span{
+    padding: 0 1em;
+}
+.customer-comment{
+    width: 300px;
+    display: block;
+    /* border: 1px solid white;  */
+}
+.order-main{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 99vw;
+    position: fixed;
+    bottom: 8vh;
+    overflow-y: scroll;
+    height: 75%;
+    background-color: var(--main-bg-color);
 }

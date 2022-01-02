@@ -68,12 +68,13 @@
 
 </script>
                                              <!-- !-- ------------------Add new game------------------- -->
-<div class="add_game_wrapper" style="display:{{admin_display}}">
-    <div class="add_game" name=add_game  onclick="add_game()">
-        <form  action="{{ url_for('index')}}" method="post">
-            <a id="add_game" href="{{url_for('add_game')}}">Add game</a>
-        </form>
-    </div>
+<div class="admin_panel" style="display:{{admin_display}}">    
+            
+            <a href="" class="add_game">Users list</a>
+            <a href="{{url_for('customers_list')}}" class="add_game">Customers list</a>
+            <a href="{{url_for('add_game')}}" class="add_game">Add game</a>
+            
+
 </div>
 
 
@@ -81,20 +82,21 @@
 </div>
 
                                        <!-- ------------------ main section of games------------------ -->
+                                       
     {% for i in range(0,length,3) %}
 
     <div class="wrapper">
         {% for j in range(i,i+3) %}
             {% if list_of_games[j] %}
 
-                <article class="game-in-list">
+                <article class="game-in-list" id={{list_of_games[j].name.replace(' ', '')}}>
 
                     <a href="{{ url_for('game', name=list_of_games[j].name) }}">
                         <img class="game-foto" src="{{ url_for('game_image',name=list_of_games[j].name) }}" alt="">
                     </a>
                     <div class="price-and-button">
                         <span>${{list_of_games[j].price}}</span>
-                        
+                                                
                         <form action="{{ url_for('add_to_cart', name=list_of_games[j].name)}}" method='post'>
                             <input type="submit" class="buy-btn" value="Buy">
                             </form>
@@ -129,7 +131,7 @@
         {% for j in range(i,i+3) %}
             {% if hidden_games[j] %}
 
-                <article class="game-in-list">
+                <article class="game-in-list" id={{list_of_games[j].name.replace(' ', '')}}>
 
                     <a href="{{ url_for('game', name=hidden_games[j].name) }}">
                         <img class="game-foto" src="{{ url_for('game_image',name=hidden_games[j].name) }}" alt="">

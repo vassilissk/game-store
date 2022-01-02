@@ -1,4 +1,8 @@
 # import schedule, time
+import bdb
+
+import requests.cookies
+import datetime
 from service.crud_operations import *
 import sqlite3
 from setup import app, session
@@ -12,6 +16,10 @@ from flask_login import LoginManager, current_user, \
 login_manager = LoginManager(app)
 login_manager.login_view = '/index#login'
 
+import flagpy as fp
+import phonenumbers
+from phonenumbers import timezone, carrier, geocoder
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -24,10 +32,7 @@ print('Hello World ssss')
 @app.route('/index', methods=["POST", "GET"])
 @app.route('/', methods=["POST", "GET"])
 def index():
-    if 'cart' in session:
-        print('cart in session')
-        pass
-    else:
+    if not 'cart' in session:
         session['cart'] = {}
 
     res = flask.make_response()
@@ -57,7 +62,7 @@ def index():
                 list_of_games = [game for game in games if game.hidden == 0]
             in_or_out, logged, show_profile = show_log_in_out()
             hidden_games = [game for game in Game.query.all() if game.hidden > 0]
-            return render_template("homepage.html", list_of_games=list_of_games, len=len(list_of_games),
+            return render_template("homepage.html", list_of_games=list_of_games, length=len(list_of_games),
                                    form=form, in_or_out=in_or_out, logged=logged, hidden_games=hidden_games,
                                    admin_display=admin_display, show_profile=show_profile)
 
@@ -76,7 +81,7 @@ def index():
                             print(game)
                             # if game.hidden == 0:
                             list_of_games.append(game)
-            hidden_games = [game for game in Game.query.all() if game.hidden > 0]
+            # hidden_games = [game for game in Game.query.all() if game.hidden > 0]
             print(list_of_games)
             in_or_out, logged, show_profile = show_log_in_out()
             hidden_games = [game for game in Game.query.all() if game.hidden > 0]
@@ -148,8 +153,7 @@ def index():
 def cart():
     form = SomeForm()
     game_in_cart_list = []
-    if request.method == "POST":
-        print("Hello", request.form)
+    print(session['cart'])
 
     for item in session['cart']:
         game_in_cart = Game.query.filter(Game.name == item).first()
@@ -157,9 +161,12 @@ def cart():
     cart_games_amount = sum(session['cart'].values()) if \
         len(session['cart']) and sum(session['cart'].values()) else ''
     in_or_out, logged, show_profile = show_log_in_out()
+    total = sum(
+        [Game.query.filter(Game.name == item).first().price * session['cart'][item] for item in session['cart']])
+    print(total)
     return render_template("cart.html", form=form, game_in_cart_list=game_in_cart_list,
                            cart_games_amount=cart_games_amount, in_or_out=in_or_out,
-                           logged=logged, show_profile=show_profile)
+                           logged=logged, show_profile=show_profile, total=total)
 
 
 @app.route('/cart_plus_minus/<name>', methods=["POST", "GET"])
@@ -169,9 +176,18 @@ def cart_plus_minus(name):
             session['cart'][name] += 1
         elif "cart_sub" in request.form:
             session['cart'][name] -= 1
-        if session['cart'][name] < 0:
-            session['cart'][name] = 0
+        if session['cart'][name] < 1:
+            session['cart'][name] = 1
         session.modified = True
+    return redirect("/cart")
+
+
+@app.route('/delitem/<name>')
+def delitem(name):
+    print(session['cart'])
+    session['cart'].pop(name)
+    session.modified = True
+    print(session['cart'])
     return redirect("/cart")
 
 
@@ -221,6 +237,7 @@ def add_game():
                     price=price, genre=genre)
         db.session.add(game)
         db.session.commit()
+        return redirect('/index')
     in_or_out, logged, show_profile = show_log_in_out()
     return render_template('add_game.html', form=form,
                            in_or_out=in_or_out, logged=logged, show_profile=show_profile)
@@ -243,6 +260,7 @@ def edit_game(name):
         game.genre = request.form['game_genre']
 
         db.session.commit()
+        return redirect('/index')
     in_or_out, logged, show_profile = show_log_in_out()
     game = Game.query.filter_by(name=name).first()
     return render_template('edit_game.html', form=form, game=game,
@@ -354,8 +372,10 @@ def profile():
         user.last_name = request.form['last_name']
         db.session.commit()
         flask.redirect('profile')
+    cart_games_amount = sum(session['cart'].values()) if \
+        len(session['cart']) and sum(session['cart'].values()) else ''
     in_or_out, logged, show_profile = show_log_in_out()
-    return render_template("profile.html", form=form,
+    return render_template("profile.html", form=form, cart_games_amount=cart_games_amount,
                            in_or_out=in_or_out, logged=logged, show_profile=show_profile)
 
 
@@ -394,7 +414,7 @@ def reply(name, parent_id):
                            comments=comments)
 
 
-@app.route('/add_to_cart/<name>', methods=["POST", "GET"])
+@app.route('/add_to_cart/<path:name>', methods=["POST", "GET"])
 def add_to_cart(name):
     if request.method == 'POST':
         if name in session['cart']:
@@ -404,7 +424,92 @@ def add_to_cart(name):
             session['cart'][name] = 1
         session.modified = True
         print(session)
-        return redirect('/index')
+        return redirect('/index' + '#' + name.replace(' ', ''))
+
+
+@app.route('/confirm_order', methods=["POST", "GET"])
+def confirm_order():
+    form = SomeForm()
+    # ukr = fp.get_flag_img('Ukraine')
+    display_method = "block"
+    if request.method == "POST":
+        print(request.form)
+        first_name = request.form['first_name']
+        last_name = request.form['last_name']
+        email = request.form['email']
+        phone = request.form['phone']
+        payment_type = request.form['payment_type']
+        comment = request.form['add_game_description']
+        date_of_order = datetime.datetime.today().strftime("%H:%M:%S %b %d %Y")
+        print(date_of_order)
+        customer = Customer(first_name=first_name, last_name=last_name, email=email,
+                            phone=phone, payment_type=payment_type, comment=comment, date_of_order=date_of_order)
+        db.session.add(customer)
+        for item in session['cart']:
+            game = item
+            price = Game.query.filter(Game.name == game).first().price
+            amount = session['cart'][item]
+            user_id = customer.id
+            total = price * amount
+            order = Order(game=game, price=price, amount=amount, user_id=user_id, total=total)
+            db.session.add(order)
+        db.session.commit()
+        flash("Your order has been accepted")
+        session['cart'].clear()
+        display_method = "none"
+
+    cart_games_amount = sum(session['cart'].values()) if \
+        len(session['cart']) and sum(session['cart'].values()) else ''
+    in_or_out, logged, show_profile = show_log_in_out()
+    return render_template('confirm_order.html', form=form, cart_games_amount=cart_games_amount,
+                           in_or_out=in_or_out, logged=logged, show_profile=show_profile,
+                           display_method=display_method)
+
+
+@app.route('/customers_list')
+def customers_list():
+    form = SomeForm()
+    customers_list = [customer for customer in Customer.query.all()]
+    print(customers_list)
+    cart_games_amount = sum(session['cart'].values()) if \
+        len(session['cart']) and sum(session['cart'].values()) else ''
+    in_or_out, logged, show_profile = show_log_in_out()
+    return render_template('customers_list.html', form=form, customers_list=customers_list,
+                           cart_games_amount=cart_games_amount,
+                           in_or_out=in_or_out, logged=logged, show_profile=show_profile)
+
+@app.route('/order/<customer_id>')
+def order(customer_id):
+    form = SomeForm()
+    print(customer_id)
+    # cart_games_amount = sum(session['cart'].values()) if \
+    #     len(session['cart']) and sum(session['cart'].values()) else ''
+
+    customer = Customer.query.filter_by(id=customer_id).first()
+    order = Order.query.filter_by(user_id=customer_id)
+    total = sum([item.total for item in order])
+    print(total)
+
+    in_or_out, logged, show_profile = show_log_in_out()
+    return render_template('order.html', form=form, in_or_out=in_or_out,customer=customer,order=order,
+                           logged=logged, show_profile=show_profile, total=total)
+
+
+@app.route('/close_order/<customer_id>')
+def close_order(customer_id):
+    print(customer_id)
+    customer = Customer.query.filter_by(id=customer_id).first()
+    orders = Order.query.filter_by(user_id=customer_id)
+    for order in orders:
+        db.session.delete(order)
+    db.session.delete(customer)
+    db.session.commit()
+    return redirect('/customers_list')
+
+# @app.route('/country')
+# def country():
+#     ukr = fp.get_flag_img('Ukraine')
+#     return ukr
 
 
 def show_log_in_out():

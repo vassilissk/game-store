@@ -5,15 +5,22 @@
 {% endblock %}
 
 {% block main %}
-<div>        
-    Your cart Total:
-</div>
+<section class="before-main">
+    <span>
+        Your cart
+    </span>     
+    <div>
+       <div>Total:${{total}}</div> 
+       <a href="{{ url_for('confirm_order') }}" class="confirm-button"> Proceed </a>
+    </div>   
+     
+</section>
 <section class="cart-main">
     {% for game in game_in_cart_list %}
         <div class="cart-item">
             <img class="cart-game-foto" src="{{ url_for('game_image',name=game.name) }}" alt="">
             <div class="cart-item-name-price">
-                {{ game.name }} <span>{{ game.price }}</span>
+                {{ game.name }} <span>${{ game.price }}</span>
             </div>
             <div class="add-and-sub">
                 <form class="cart-form" action="{{ url_for('cart_plus_minus',name=game.name) }}" method="post">
@@ -21,14 +28,19 @@
                     {{ form.cart_add(value="+", class="cart-form") }}
                     <span class="cart-form">{{ session['cart'][game.name] }}</span>
                     {{ form.cart_sub(value="-", class="cart-form" )}}
-                </form>
-                <!-- <form id="{{ game.name }}" action="{{ url_for('cart') }}" method="post">                    
-                    <span class="submit-">-</span>
-                    <span class="submit+">+</span>
-                </form> -->
+                </form>                
+            </div>
+
+            <div class="cart-item-name-price">
+                Total: <span>${{ game.price * session['cart'][game.name] }}</span>
+            </div>
+
+            <div class="cart-del-item">
+                <a id="cart-del-item" href="{{ url_for('delitem',name=game.name) }}">&times;</a> 
             </div>
             
         </div>
+
     {% endfor %}
 </section>
 

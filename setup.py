@@ -1,4 +1,6 @@
 # import threading, schedule, time
+import datetime
+
 from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask, session
 from datetime import timedelta
@@ -13,7 +15,7 @@ database = os.path.join(app.root_path, 'service', 'database.db')
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + database
 app.config["REMEMBER_COOKIE_DURATION"] = timedelta(weeks=1)
 # app.config [ "UPLOAD_FOLDER"] = os.path.join(app.root_path, 'static', 'profile-img')
-app.debug = True
+
 # db = SQLAlchemy(app)
 # admin = Admin(app)
 from views.views import *
@@ -23,15 +25,20 @@ from views.views import *
 # admin.add_view(ModelView(Game,db.session))
 app.secret_key = 'the random string'
 
+count = 0
 
-# def sensor():
-#     """ Function for test purposes. """
-#     print("Scheduler is alive!")
-#
-#
-# sched = BackgroundScheduler(daemon=True)
-# sched.add_job(sensor, 'interval', days=1)
-# sched.start()
+
+def sensor():
+    global count
+    """ Function for test purposes. """
+    count += 1
+
+    print("Scheduler is alive!", count, datetime.datetime.now())
+
+
+sched = BackgroundScheduler(daemon=True)
+sched.add_job(sensor, 'interval', weeks=1)
+sched.start()
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)

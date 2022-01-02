@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block menu %}
+{{super()}}
+
+{% endblock %}
+
+{% block main %}
+{{super()}}
+<script>
+	function confirm_order(){
+		document.getElementById('confirm-order-form').submit();
+	}
+    </script>
+<section class="main">
+    <h1>Completing your order</h1>
+    <div class="complete_order_form_wrapper">
+
+        
+
+        <form action="{{ url_for('confirm_order') }}" method="post" id="confirm-order-form">
+            <div class="flash-message">
+            {% with messages = get_flashed_messages() %}
+                   {% if messages %}
+                         {% for message in messages %}
+                              <p>{{ message }}</p>
+                         {% endfor %}
+                   {% endif %}
+                {% endwith %}
+            </div>
+            <div class="complete_order_form">
+                <span>{{ form.first_name.label() }}</span> 
+                    <span>{{ form.first_name() }}</span>
+                <span>{{ form.last_name.label() }}</span> 
+                    <span>{{ form.last_name() }}</span>
+                <span>{{ form.email.label() }}</span> 
+                    <span>{{ form.email() }}</span>
+                <span>{{ form.phone.label() }}</span> 
+                    <span>{{ form.phone() }}</span>
+                <span>{{ form.payment_type.label() }}</span> 
+                    <span>{{ form.payment_type(width=20) }}</span>
+                <span>{{ form.comment.label("Comments (Optional)") }}</span> 
+                    <span>{{ form.add_game_description(rows = 8) }}</span>
+            </div>
+            <!-- <a href="" class="confirm-order-button" onclick="confirm_order()"> Submit </a> -->
+            <div style="display: {{ display_method}};">{{form.submit_order(class="confirm-order-button") }}</div>
+        </form>
+    </div>    
+</section>
+<script>
+    if ( window.history.replaceState ) {
+        window.history.replaceState( null, null, window.location.href );
+    }
+</script>
+{% endblock %}
+
+{%block footer%}
+{{super()}}
+{% endblock %}
