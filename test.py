@@ -26,4 +26,4 @@ from phonenumbers import timezone, carrier, geocoder
 # # print(fp.get_country_list())
 # ukr = fp.get_flag_img('Ukraine')
 # ukr.show()
-print(datetime.datetime.now())
+print(datetime.datetime.now().strftime("%d/%m/%Y, %H:%M:%S"))

@@ -1,54 +1,60 @@
-{% extends "base.html" %}
-{% block menu %}
-{{super()}}
-{% endblock %}
+{% extends "base.html" %} {% block menu %} {{super()}} {% endblock %} {% block
+main %}
+<h1>Profile {{current_user.username}}</h1>
+<section>
+  <div class="profile-wrapper">
+    <div class="profile">
+      <div>
+        <form
+          action="{{ url_for('profile')}}"
+          method="post"
+          enctype="multipart/form-data"
+        >
+          {{ form.hidden_tag() }}
 
-{% block main %}
-<h1> Profile {{current_user.username}}</h1>
-<section >
-    <div class="profile-wrapper">
-            <div class="profile">
-                <div>
-                <form  action="{{ url_for('profile')}}" method="post" enctype="multipart/form-data">
-                    {{ form.hidden_tag() }}
+          <p class="profile-p">
+            <span>{{ form.username.label() }}</span>
+            <span>{{ form.username(value=current_user.username) }}</span>
+          </p>
 
-                    <p class="profile-p"><span>{{ form.username.label() }}</span> <span>{{ form.username(value=current_user.username) }}</span></p>
+          <p class="profile-p">
+            <span>{{ form.first_name.label() }}</span>
+            <span>{{ form.first_name(value=current_user.first_name) }}</span>
+          </p>
+          <p class="profile-p">
+            <span>{{ form.last_name.label() }}</span>
+            <span>{{ form.last_name(value=current_user.last_name) }}</span>
+          </p>
+          <p class="profile-p">
+            <span>{{ form.password.label() }}</span>
+            <span>{{ form.profile_password() }}</span>
+          </p>
+          <p class="profile-p">
+            <span>{{ form.confirm_password.label() }}</span>
+            <span>{{ form.profile_confirm_password() }}</span>
+          </p>
+          <p class="profile-p">
+            <span>{{ form.email.label() }}</span>
+            <span>{{ form.email(value=current_user.email) }}</span>
+          </p>
 
-                    <p class="profile-p"><span>{{ form.first_name.label() }}</span> <span>{{ form.first_name(value=current_user.first_name) }}</span></p>
-                    <p class="profile-p"><span>{{ form.last_name.label() }}</span> <span>{{ form.last_name(value=current_user.last_name) }}</span></p>
-                    <p class="profile-p"><span>{{ form.password.label() }}</span> <span>{{ form.profile_password() }}</span></p>
-                    <p class="profile-p"><span>{{ form.confirm_password.label() }}</span> <span>{{ form.profile_confirm_password() }}</span></p>
-                    <p class="profile-p"><span>{{ form.email.label() }}</span> <span>{{ form.email(value=current_user.email) }}</span></p>
+          {{form.upload.label()}} {{form.upload()}}
 
-                    {{form.upload.label()}} {{form.upload()}}	
+          <div class="flash-message">
+            {% with messages = get_flashed_messages() %} {% if messages %} {%
+            for message in messages %}
+            <p>{{ message }}</p>
+            {% endfor %} {% endif %} {% endwith %}
+          </div>
+          <div>{{form.profile_submit() }}</div>
+        </form>
+      </div>
+    </div>
 
-                    <div class="flash-message">
-                    {% with messages = get_flashed_messages() %}
-                       {% if messages %}
-                             {% for message in messages %}
-                                  <p>{{ message }}</p>
-                             {% endfor %}
-                       {% endif %}
-                    {% endwith %}
-                    </div>
-                    <div>{{form.profile_submit() }}</div>
-                </form>
-            </div> 
-                    
-               
-            </div>    
-
-                 <div>
-                        <img class="profile-foto" src="{{ url_for('userava') }}" alt="">
-                    </div>   
-
-    </div>       
+    <div>
+      <img class="profile-foto" src="{{ url_for('userava') }}" alt="" />
+    </div>
+  </div>
 </section>
 
-
- 
-{% endblock %}
-
-{% block footer %}
-{{super()}}
-    {% endblock %}
+{% endblock %} {% block footer %} {{super()}} {% endblock %}

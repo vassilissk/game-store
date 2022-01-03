@@ -14,7 +14,7 @@
                 <div class="game-name"> {{game.name}} </div>
                 <div class="game-price-and-button">
                     <span>${{game.price}}</span>
-                    <button type="submit" class="game-buy-btn">Buy</button>              
+                    <a href="{{ url_for('add_to_cart', name=game.name)}}" class="add_game">Buy</a>              
                 </div>
                  
         </div>
@@ -31,8 +31,10 @@
             {{game.description}}
         </section>
 
-
-        <a href="#add_comment">Add comment</a>
+<div class="add-comment-div">
+    <a href="#add_comment" class="add_comment">Add comment ...</a>
+</div>
+        
 
         <div id="add_comment" class="modalDialog">
             <div>
@@ -47,39 +49,46 @@
         </div>
 
 
-        
+ <div class="comment-wrapper">       
     {% for comment in comments %}
 
-        <div class="comments">
-            <p class="author"><img class="foto" src={{url_for('comment_ava', user_id=comment.user_id)}} alt=""> {{comment.author_name}}</p>
-            <p class="comment">
-               {{comment.id}} {{comment.comment}}
-               {% set parent_id = comment.id %}
-
-               <div id="reply" class="modalDialog">
+        <div class="comments" style="padding-left:{{ comment.number_of_parents * 70 }}px ;">
+            
+            <div class="author"><img class="foto" src={{url_for("comment_ava", user_id=comment.user_id)}} alt=""> 
+                {{comment.author_name}} <span style="padding-left: 1em;">{{ comment.time_left }}</span>
+            </div>
+            <div class="comment" >
+                {{comment.comment}}
+               
+               
+               <div id="comment{{comment.id}}" class="modalDialog" >
                 
                 <div>
-                    {{comment.id}}
-                    <form action="{{ url_for('reply', name=game.name, parent_id=parent_id)}}" method="post">
+                    
+                    <form action="{{ url_for('reply', name=game.name, parent_id=comment.id)}}" method="post">
                         {{ form.hidden_tag() }}
+
                         <a href="{{ url_for('game', name=game.name)}}">X</a>
-                        {{parent_id}}{{comment.id}}{{ form.comment(value='') }}
+
+                        {{ form.comment(value='') }}
                         {{ form.comment_submit() }}
                     </form>
                 </div>
                 
             </div>
                
-            </p>
-            {{parent_id}}
+            </div>
+            
             
 
-            <p class="reply">
-             <a href="#reply"> reply</a>
-            </p>
+            <div class="reply">
+             <a href="#comment{{comment.id}}"> reply</a>
+            </div>
             
         </div>
     {% endfor %}
+</div>
+
     </section>
     
     {% endblock %}

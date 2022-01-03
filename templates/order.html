@@ -1,44 +1,40 @@
-{% extends "base.html" %}
-{% block menu %}
-{{super()}}
-
-{% endblock %}
-
-{% block main %}
+{% extends "base.html" %} {% block menu %} {{super()}} {% endblock %} {% block
+main %}
 <section class="order-main">
-    <h1> Order <span>{{ customer.first_name }} {{ customer.last_name }}</span></h1>
-    
-    <p class="order-p">
-        <span>Name:</span>    <span>{{ customer.first_name }} {{ customer.last_name }}</span> 
-    </p >
-    <p class="order-p">
-        <span>Email:</span>    <span>{{ customer.email }} </span> 
-    </p>
-    <p class="order-p">
-        <span>Phone number:</span>    <span>{{ customer.phone }} </span> 
-    </p>
-    <p class="order-p">
-        <span>Payment type:</span>    <span>{{ customer.payment_type }} </span> 
-    </p>
-    <p class="order-p">
-        <span>Comment:</span>    <span class="customer-comment">{{ customer.comment }} </span> 
-    </p>
-    <p class="order-p">
-        <span>Date of ordering:</span>    <span>{{ customer.date_of_order }} </span> 
-    </p>
-    {% for game in order %}
-        <p class="order-p-game">
-          <span>{{ game.game }}</span>  
-          <span>{{ game.amount }} pcs</span> 
-          <span>$ {{ game.total }}</span >
-        </p>    
-    {% endfor %}
-    
-    <p class="order-p">
-            Total : $ {{total}}
-    </p>
-    
-        <a href="{{ url_for('close_order',customer_id=customer.id) }}" class="add_game">Complete order</a>
-     
+  <h1>Order <span>{{ customer.first_name }} {{ customer.last_name }}</span></h1>
+
+  <p class="order-p">
+    <span>Name:</span>
+    <span>{{ customer.first_name }} {{ customer.last_name }}</span>
+  </p>
+  <p class="order-p"><span>Email:</span> <span>{{ customer.email }} </span></p>
+  <p class="order-p">
+    <span>Phone number:</span> <span>{{ customer.phone }} </span>
+  </p>
+  <p class="order-p">
+    <span>Payment type:</span> <span>{{ customer.payment_type }} </span>
+  </p>
+  <p class="order-p">
+    <span>Comment:</span>
+    <span class="customer-comment">{{ customer.comment }} </span>
+  </p>
+  <p class="order-p">
+    <span>Date of ordering:</span> <span>{{ customer.date_of_order }} </span>
+  </p>
+  {% for game in order %}
+  <p class="order-p-game">
+    <span>{{ game.game }}</span>
+    <span>{{ game.amount }} pcs</span>
+    <span>$ {{ game.total }}</span>
+  </p>
+  {% endfor %}
+
+  <p class="order-p">Total : $ {{total}}</p>
+
+  <a
+    href="{{ url_for('close_order',customer_id=customer.id) }}"
+    class="add_game"
+    >Complete order</a
+  >
 </section>
 {% endblock %}

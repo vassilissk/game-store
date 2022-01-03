@@ -38,13 +38,15 @@ class User(db.Model, UserMixin):
 class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     comment = db.Column(db.String(600), nullable=False)
-    parent_id = db.Column(db.Integer)
+    parent_id = db.Column(db.Integer, default=0)
     pub_date = db.Column(db.DateTime, nullable=False,
                          default=datetime.datetime.utcnow())
-    children_id = db.Column(db.String(600))
+    children_id = db.Column(db.String(600), default=None)
     game_id = db.Column(db.Integer, nullable=False)
     author_name = db.Column(db.String(60), default=None, )
     user_id = db.Column(db.Integer, default=0)
+    number_of_parents = db.Column(db.Integer, default=0)
+    time_left = db.Column(db.String, nullable=False)
 
 
 def __repr__(self):
