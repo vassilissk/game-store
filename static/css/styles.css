@@ -549,17 +549,21 @@ border-color: blue; */
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 110%;
+  width: 130%;
+  /* border: 1px solid green; */
 }
 .profile-wrapper {
   width: 60vw;
   /* border: 1px solid red; */
   /* flex-direction: column; */
   display: flex;
-
+/* border: 1px solid red; */
   justify-content: space-between;
   align-items: center;
 }
+
+.add-game-form{}
+
 .admin_panel {
   display: flex;
   justify-content: space-around;

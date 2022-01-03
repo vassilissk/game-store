@@ -11,13 +11,16 @@
                 <form class="profile" action="{{ url_for('edit_game', name=game.name)}}" method="post" enctype="multipart/form-data">
                     {{ form.hidden_tag() }}
 
-                    <p class="profile-p"><span>{{ form.add_game_name.label() }}</span>
-                         <span>{{ form.add_game_name(value=game.name) }}</span></p>
-                    <p class="profile-p"><span>{{ form.add_game_description.label() }}</span>
+                    <p class="profile-p"><span >{{ form.add_game_name.label() }}</span>
+                         <span class="add-game-form">{{ form.add_game_name(value=game.name) }}</span></p>
 
-                       <span>{{ form.add_game_description(rows=5 ) }}</span></p>
+                    <p class="profile-p"><span>{{ form.add_game_description.label() }}</span>
+                        {% set f = form.add_game_description.process_data(game.description) %}
+                       <span>{{ form.add_game_description(rows='12', cols='40') }}</span></p>
+
                     <p class="profile-p"><span>{{ form.game_price.label() }}</span>
                        <span>{{ form.game_price(value=game.price) }}</span></p>
+
                     <p class="profile-p"><span>{{ form.game_genre.label() }}</span>
                        <span>{{ form.game_genre(value=game.genre) }}</span></p>
 

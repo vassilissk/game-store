@@ -1,10 +1,13 @@
 from flask_wtf import FlaskForm
-from wtforms import  SelectField, SubmitField, StringField, FileField, BooleanField, \
+from wtforms import SelectField, SubmitField, StringField, FileField, BooleanField, \
     DateField, DateTimeField, SelectMultipleField, PasswordField, MultipleFileField, TextAreaField
 from wtforms.validators import DataRequired, Email, Length
 import phonenumbers
 from wtforms.widgets import TextArea
-style = {'style': 'width: 20vw; height:3vh;font-size: 1.3em'}
+
+style = {'style': 'width: 30vw; height:3vh;font-size: 1.3em'}
+
+
 class SomeForm(FlaskForm):
     # search=SearchField('Search')
     # select=SelectField('Select')
@@ -60,16 +63,19 @@ class SomeForm(FlaskForm):
     logout_submit = SubmitField('Logout', id='log_out')
     upload = FileField('Upload avatar')
     upload_submit = SubmitField('Upload')
-    comment = TextAreaField("Message", validators=[DataRequired()],
-                            render_kw={'style': 'width: 20vw;font-size: 1.3em; rows:8'})
+    comment = TextAreaField("TextArea", validators=[DataRequired()],
+                            render_kw={"rows": 12, "cols": 11}
+                            )
     comment_submit = SubmitField('Submit', id='comment_submit')
 
     add_game_submit = SubmitField('Add new game', id='add_new_game')
-    add_game_name = StringField('Name',validators=[DataRequired()], render_kw=style)
-    add_game_description = TextAreaField('Description', render_kw={'style': 'width: 20vw;font-size: 1.3em; rows:8'})
+    add_game_name = StringField('Name', validators=[DataRequired()], render_kw=style)
+    add_game_description = TextAreaField('Description',
+                                         render_kw={'style': 'font-size: 1.3em'}
+                                         )
     upload_game_image = FileField('Upload image')
     game_price = StringField('Price', validators=[DataRequired()], render_kw=style)
-    game_genre = StringField('Genre',validators=[DataRequired()], render_kw=style)
+    game_genre = StringField('Genre', validators=[DataRequired()], render_kw=style)
     cart_add = SubmitField()
     cart_sub = SubmitField()
     phone = StringField('Phone', validators=[DataRequired()], render_kw=style)

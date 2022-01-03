@@ -39,7 +39,7 @@
                 <span>{{ form.payment_type.label() }}</span> 
                     <span>{{ form.payment_type(width=20) }}</span>
                 <span>{{ form.comment.label("Comments (Optional)") }}</span> 
-                    <span>{{ form.add_game_description(rows = 8) }}</span>
+                    <span>{{ form.add_game_description(rows='12', cols='50') }}</span>
             </div>
             <!-- <a href="" class="confirm-order-button" onclick="confirm_order()"> Submit </a> -->
             <div style="display: {{ display_method}};">{{form.submit_order(class="confirm-order-button") }}</div>
