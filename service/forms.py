@@ -5,7 +5,7 @@ from wtforms.validators import DataRequired, Email, Length
 # import phonenumbers
 from wtforms.widgets import TextArea
 
-style = {'style': 'width: 30vw; height:3vh;font-size: 1.3em'}
+style = {'style': 'width: 30vw; height:4vh;font-size: 1.3em'}
 
 
 class SomeForm(FlaskForm):
@@ -64,14 +64,14 @@ class SomeForm(FlaskForm):
     upload = FileField('Upload avatar')
     upload_submit = SubmitField('Upload')
     comment = TextAreaField("TextArea", validators=[DataRequired()],
-                            render_kw={"rows": 12, "cols": 11}
+                            render_kw={"rows": 8, "cols": 21}
                             )
     comment_submit = SubmitField('Submit', id='comment_submit')
 
     add_game_submit = SubmitField('Add new game', id='add_new_game')
     add_game_name = StringField('Name', validators=[DataRequired()], render_kw=style)
     add_game_description = TextAreaField('Description',
-                                         render_kw={'style': 'font-size: 1.3em'}
+                                         render_kw={"rows": 6, "cols": 35}
                                          )
     upload_game_image = FileField('Upload image')
     game_price = StringField('Price', validators=[DataRequired()], render_kw=style)
@@ -79,8 +79,9 @@ class SomeForm(FlaskForm):
     cart_add = SubmitField()
     cart_sub = SubmitField()
     phone = StringField('Phone', validators=[DataRequired()], render_kw=style)
-    payment_type = SelectField('Select payment type', choices=['Cash', 'Card'], render_kw=style)
+    payment_type = SelectField('Select payment type', choices=['Cash', 'Card'],
+                               render_kw={'style': 'width: 31vw; height:5vh;font-size: 1em'})
     submit_order = SubmitField('Submit')
     roles = SelectField('Select roles',default='', choices=['User', 'Manager', 'Admin'],
-                        render_kw={'style': 'width: 30vw; height:4vh;font-size: 1.3em'})
+                        render_kw={'style': 'width: 31vw; height:5vh;font-size: 1em'})
     submit_role = SubmitField('Save')

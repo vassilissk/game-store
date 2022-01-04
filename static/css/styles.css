@@ -27,8 +27,8 @@ menu li {
   list-style: none;
   background-color: black;
   color: white;
-  padding-left: 1.3em;
-  padding-right: 1.3em;
+  padding-left: 1em;
+  padding-right: 1em;
 }
 
 menu {
@@ -56,15 +56,16 @@ ul a {
 
 menu li:hover {
   /* background-color: cadetblue; */
-  text-decoration: underline;
+  text-decoration: none;
   color: lightgrey;
 }
 .logo {
-  width: 60%;
-  margin-right: 5vw;
+  width: 100%;
+  /* margin-right: 5vw; */
   font-size: 150%;
   display: flex;
   align-items: center;
+  justify-content: flex-start;
 }
 #one {
   font-size: 200%;
@@ -107,10 +108,10 @@ menu li:hover {
 .game-in-list {
   flex-direction: column;
   align-items: center;
-  justify-content: start;
+  /* justify-content: start; */
   margin: 4%;
-  width: 300px;
-  height: 500px;
+  width: 25vw;
+  /* height: 500px; */
   position: relative;
 }
 
@@ -152,8 +153,9 @@ menu li:hover {
 }
 
 .wrapper {
+  width: 100%;
   display: flex;
-  justify-content: start;
+  justify-content: flex-start;
 }
 
 /*            main                 */
@@ -570,13 +572,17 @@ border-color: blue; */
   /* padding-right: 10%; */
 }
 
-.add_game {
+
+.add_game{
   background-color: rgb(45, 153, 45);
-  width: 10vw;
+  width: 13vw;
   height: 1em;
   text-align: center;
-  padding: 1%;
+  padding: 0.5%;
   border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .add_game:hover {
   cursor: pointer;
@@ -598,6 +604,9 @@ border-color: blue; */
   color: white;
 }
 
+/* .add_game :first-of-type{
+  color: red;
+} */
 .cart-main {
   width: 80%;
 
@@ -671,7 +680,7 @@ border-color: blue; */
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 2em;
+  font-size: 1.5em;
   margin: 1%;
 }
 
@@ -688,7 +697,7 @@ border-color: blue; */
   /* font-size: 0.3em; */
   text-decoration: none;
   border-radius: 2px;
-  font-size: 0.5em;
+  font-size: 0.4em;
 }
 
 .confirm-order-button {
@@ -797,4 +806,7 @@ border-color: blue; */
 .users_list span{
   padding: 0em 2em;
   width: 20%;
+}
+h2{
+  margin: 1%;
 }

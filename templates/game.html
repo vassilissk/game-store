@@ -70,7 +70,7 @@
                         {{ form.hidden_tag() }}
 
                         <a href="{{ url_for('game', name=game.name)}}">X</a>
-                        {% set f = form.comment.process_data(comment.comment) %}
+                        <!-- {% set f = form.comment.process_data(comment.comment) %} -->
                         {{ form.comment() }}
                         {{ form.comment_submit() }}
                     </form>

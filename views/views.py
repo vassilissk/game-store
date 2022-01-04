@@ -70,6 +70,7 @@ def index():
                 list_of_games = [game for game in games if game.hidden == 0]
             in_or_out, logged, show_profile = show_log_in_out()
             hidden_games = [game for game in Game.query.all() if game.hidden > 0]
+            print(list_of_games,len(list_of_games))
             return render_template("homepage.html", list_of_games=list_of_games, length=len(list_of_games),
                                    form=form, in_or_out=in_or_out, logged=logged, hidden_games=hidden_games,
                                    admin_display=admin_display, show_profile=show_profile)
