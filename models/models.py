@@ -30,6 +30,7 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(120), unique=False, nullable=False)
     avatar = db.Column(db.BLOB)
+    role = db.Column(db.String(10), unique=True, nullable=False, default='User')
 
     def __repr__(self):
         return '<User %r>' % self.username
@@ -61,6 +62,7 @@ class Game(db.Model):
     genre = db.Column(db.String(50), nullable=False)
     description = db.Column(db.String(600))
     hidden = db.Column(db.Integer, default=0)
+    hidden_date = db.Column(db.DateTime,default=datetime.datetime.today())
 
     def __repr__(self):
         return '<Game %r>' % self.name

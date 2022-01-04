@@ -1,12 +1,12 @@
 # import threading, schedule, time
-import datetime
-
+# import datetime
+# from service.crud_operations import *
 from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask, session
 from datetime import timedelta
-from flask_sqlalchemy import SQLAlchemy
-from flask_admin import Admin
-from flask_admin.contrib.sqla import ModelView
+# from flask_sqlalchemy import SQLAlchemy
+# from flask_admin import Admin
+# from flask_admin.contrib.sqla import ModelView
 import os
 
 app = Flask(__name__)
@@ -20,24 +20,25 @@ app.config["REMEMBER_COOKIE_DURATION"] = timedelta(weeks=1)
 # admin = Admin(app)
 from views.views import *
 
-# from models.models import Game,User,db
+from models.models import Game,User,db
 # admin.add_view(ModelView(User,db.session))
 # admin.add_view(ModelView(Game,db.session))
 app.secret_key = 'the random string'
 
-count = 0
 
 
-def sensor():
-    global count
-    """ Function for test purposes. """
-    count += 1
 
-    print("Scheduler is alive!", count, datetime.datetime.now())
+def background_deleting():
+    games = Game.query.filter(Game.hidden == 1)
+    for game in games:
+        if datetime.datetime.now() > game.hidden_date + datetime.timedelta(weeks=13):
+            db.session.delete(game)
+    db.session.commit()
+
 
 
 sched = BackgroundScheduler(daemon=True)
-sched.add_job(sensor, 'interval', weeks=1)
+sched.add_job(background_deleting, 'interval', weeks=1)
 sched.start()
 
 if __name__ == "__main__":

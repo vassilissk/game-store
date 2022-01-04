@@ -3,10 +3,10 @@ import datetime
 import schedule
 import time
 from time import sleep
-import flagpy as fp
-
-import phonenumbers
-from phonenumbers import timezone, carrier, geocoder
+# import flagpy as fp
+#
+# import phonenumbers
+# from phonenumbers import timezone, carrier, geocoder
 
 # phonenumber = phonenumbers.parse("+380679231685")
 # print(phonenumber)
@@ -26,4 +26,9 @@ from phonenumbers import timezone, carrier, geocoder
 # # print(fp.get_country_list())
 # ukr = fp.get_flag_img('Ukraine')
 # ukr.show()
-print(datetime.datetime.now().strftime("%d/%m/%Y, %H:%M:%S"))
+# print(datetime.datetime.now().strftime("%d/%m/%Y, %H:%M:%S"))
+a=datetime.datetime.now()
+sleep(1)
+b=datetime.datetime.now()
+a_timedelta = datetime.timedelta(seconds=3)
+print(type(a),b, b-a<a_timedelta)

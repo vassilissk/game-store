@@ -68,9 +68,9 @@
 
 </script>
                                              <!-- !-- ------------------Add new game------------------- -->
-<div class="admin_panel" style="display:{{admin_display}}">    
+<div class="admin_panel" style="display:{{manager_display}}">    
             
-            <a href="" class="add_game">Users list</a>
+            <a href="" class="add_game" style="display:{{admin_display}}">Users list</a>
             <a href="{{url_for('customers_list')}}" class="add_game">Customers list</a>
             <a href="{{url_for('add_game')}}" class="add_game">Add game</a>
             
@@ -107,7 +107,7 @@
                     
                     <div class="game-name">{{list_of_games[j].name}}</div>
 
-                    <div class="game-in-list-admin" style="display:{{admin_display}}">
+                    <div class="game-in-list-admin" style="display:{{manager_display}}">
                         <div class="game-in-list-admin-wrapper">
                             <a href="{{url_for('edit_game', name=list_of_games[j].name)}}"><i class="fa fa-edit"></i><span>Edit game</span></a>
                             <a href="{{url_for('hide_game', name=list_of_games[j].name)}}"><i class="fa fa-trash"></i><span>Delete game</span></a>
@@ -122,7 +122,7 @@
     {% endfor %}
 </section>
 
-<section class="main" style="display:{{admin_display}}">
+<section class="main" style="display:{{manager_display}}">
 <h1>Hidden games</h1>
 
 {% for i in range(0,length,3) %}
@@ -149,7 +149,7 @@
                     
                     <div class="game-name">{{hidden_games[j].name}}</div>
 
-                    <div class="game-in-list-admin" style="display:{{admin_display}}">
+                    <div class="game-in-list-admin" style="display:{{manager_display}}">
                         <div class="game-in-list-admin-wrapper">
                             <a href="{{url_for('edit_game', name=hidden_games[j].name)}}"><i class="fa fa-edit"></i><span>Edit game</span></a>
                             <a href="{{url_for('restore_game', name=hidden_games[j].name)}}"><i class="fa fa-trash"></i><span>Restore game</span></a>

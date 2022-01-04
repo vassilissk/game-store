@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import SelectField, SubmitField, StringField, FileField, BooleanField, \
     DateField, DateTimeField, SelectMultipleField, PasswordField, MultipleFileField, TextAreaField
 from wtforms.validators import DataRequired, Email, Length
-import phonenumbers
+# import phonenumbers
 from wtforms.widgets import TextArea
 
 style = {'style': 'width: 30vw; height:3vh;font-size: 1.3em'}

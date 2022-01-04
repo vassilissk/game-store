@@ -1,4 +1,4 @@
-# import schedule, time
+import time
 import bdb
 import copy
 
@@ -17,9 +17,9 @@ from flask_login import LoginManager, current_user, \
 login_manager = LoginManager(app)
 login_manager.login_view = '/index#login'
 
-import flagpy as fp
-import phonenumbers
-from phonenumbers import timezone, carrier, geocoder
+# import flagpy as fp
+# import phonenumbers
+# from phonenumbers import timezone, carrier, geocoder
 
 
 @login_manager.user_loader
@@ -42,10 +42,17 @@ def index():
 
     genres = ['strategy', 'adventure', 'action', 'survival', 'rpg']
     selected_genres = dict()
-    if current_user.is_authenticated and current_user.username == 'admin':
-        admin_display = "flex"
+    if current_user.is_authenticated and\
+            current_user.role == 'Manager' :
+        manager_display = "flex"
+        admin_display = "none"
         games = Game.query.all()
+    elif current_user.is_authenticated and\
+            current_user.role == 'Admin' :
+        manager_display = "flex"
+        admin_display = "flex"
     else:
+        manager_display = "none"
         admin_display = "none"
         games = Game.query.filter_by(hidden=0)
     list_of_games = []
@@ -88,7 +95,8 @@ def index():
             hidden_games = [game for game in Game.query.all() if game.hidden > 0]
             return render_template("homepage.html", list_of_games=list_of_games, length=len(list_of_games),
                                    form=form, in_or_out=in_or_out, logged=logged, hidden_games=hidden_games,
-                                   admin_display=admin_display, show_profile=show_profile)
+                                   manager_display=manager_display, show_profile=show_profile,
+                                   admin_display=admin_display)
 
             # ----------- login ---------------
 
@@ -145,9 +153,9 @@ def index():
     cart_games_amount = sum(session['cart'].values()) if len(session['cart']) else ''
 
     return render_template("homepage.html", list_of_games=list_of_games, length=len(list_of_games),
-                           admin_display=admin_display, hidden_games=hidden_games,
+                           manager_display=manager_display, hidden_games=hidden_games,
                            form=form, in_or_out=in_or_out, logged=logged, show_profile=show_profile,
-                           cart_games_amount=cart_games_amount)
+                           cart_games_amount=cart_games_amount, admin_display=admin_display)
 
 
 @app.route('/cart', methods=["POST", "GET"])
@@ -275,6 +283,7 @@ def hide_game(name):
 
     game = Game.query.filter_by(name=name).first()
     game.hidden = 1
+    game.hidden_date = datetime.datetime.now()
     db.session.commit()
     # game = Game.query.filter_by(name=name).first()
     # print('game',game.hidden)
@@ -288,6 +297,7 @@ def restore_game(name):
 
     game = Game.query.filter_by(name=name).first()
     game.hidden = 0
+    game.hidden_date = None
     db.session.commit()
     # game = Game.query.filter_by(name=name).first()
     # print('game',game.hidden)
