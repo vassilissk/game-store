@@ -81,3 +81,6 @@ class SomeForm(FlaskForm):
     phone = StringField('Phone', validators=[DataRequired()], render_kw=style)
     payment_type = SelectField('Select payment type', choices=['Cash', 'Card'], render_kw=style)
     submit_order = SubmitField('Submit')
+    roles = SelectField('Select roles',default='', choices=['User', 'Manager', 'Admin'],
+                        render_kw={'style': 'width: 30vw; height:4vh;font-size: 1.3em'})
+    submit_role = SubmitField('Save')

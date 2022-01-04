@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block menu %}
+{{super()}}
+{% endblock %}
+
+{% block main %}
+
+{% for user in users %}
+
+    <div class="users_list">
+        
+        <span>{{user.first_name}} {{user.last_name}} </span> <span>{{user.role}}</span>
+        <form  action="{{ url_for('change_role', user_id=user.id) }}" method="post">
+              {{ form.roles() }} {{ form.submit_role() }}
+        </form>
+    </div>
+
+
+
+{% endfor %}
+
+{% endblock %}
+
+{% block footer %}
+{{super()}}
+    {% endblock %}

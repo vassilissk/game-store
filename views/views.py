@@ -564,6 +564,28 @@ def close_order(customer_id):
     return redirect('/customers_list')
 
 
+@app.route('/users_list')
+@login_required
+def users_list():
+    form = SomeForm()
+    users = User.query.filter(User.id > 2)
+
+    in_or_out, logged, show_profile = show_log_in_out()
+    return render_template('users_list.html', form=form, in_or_out=in_or_out,
+                           logged=logged, show_profile=show_profile, users=users)
+
+
+@app.route('/change_role/<user_id>', methods=["POST", "GET"])
+@login_required
+def change_role(user_id):
+    if request.method == "POST":
+        user = User.query.filter(User.id == user_id).first()
+        print(user.first_name)
+        role = request.form['roles']
+        user.role = role
+        print(role)
+        db.session.commit()
+        return redirect('/users_list')
 
 
 # @app.route('/country')

@@ -773,3 +773,28 @@ border-color: blue; */
   color: rgb(75, 164, 236);
   text-decoration: none;
 }
+
+.users_list{
+  display: flex;
+  justify-content: flex-start;
+  /* */
+  width: 99vw;
+  height: 10vh;
+  align-items: center;
+}
+
+.users_list:nth-child(odd) {
+  background-color: var(--main-bg-color);
+}
+
+.users_list form{
+  margin-left: 2em;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.users_list span{
+  padding: 0em 2em;
+  width: 20%;
+}
