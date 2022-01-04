@@ -564,6 +564,8 @@ def close_order(customer_id):
     return redirect('/customers_list')
 
 
+
+
 # @app.route('/country')
 # def country():
 #     ukr = fp.get_flag_img('Ukraine')
