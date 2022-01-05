@@ -47,7 +47,7 @@ class SomeForm(FlaskForm):
     password = PasswordField('Password', id='password',
                              validators=[DataRequired(), Length(min=4, max=100)],
                              render_kw=style)
-    confirm_password = PasswordField('Confirm password', id='confirm_password',
+    confirm_password = PasswordField('Confirm password', id='confirm_password',render_kw=style,
                                      validators=[DataRequired(), Length(min=4, max=100)])
     email = StringField('Email', validators=[DataRequired(), Email()],
                         render_kw=style)
