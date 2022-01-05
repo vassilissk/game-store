@@ -66,11 +66,13 @@ def index():
             for game in games:
                 if search_request.lower() in game.name.lower():
                     list_of_games.append(game)
+            list_of_games = [list_of_games[i:i + 3] for i in range(0, len(list_of_games), 3)]
             if not bool(search_request):
                 list_of_games = [game for game in games if game.hidden == 0]
+                list_of_games = [list_of_games[i:i + 3] for i in range(0, len(list_of_games), 3)]
             in_or_out, logged, show_profile = show_log_in_out()
             hidden_games = [game for game in Game.query.all() if game.hidden > 0]
-            print(list_of_games,len(list_of_games))
+            # print(list_of_games, len(list_of_games))
             return render_template("homepage.html", list_of_games=list_of_games, length=len(list_of_games),
                                    form=form, in_or_out=in_or_out, logged=logged, hidden_games=hidden_games,
                                    admin_display=admin_display, show_profile=show_profile)
@@ -146,11 +148,12 @@ def index():
             return flask.redirect("/index#login")
 
     hidden_games = [game for game in Game.query.all() if game.hidden > 0]
-
+    # hidden_games = [hidden_games[i:i + 3] for i in range(0, len(hidden_games), 3)]
     list_of_games = [game for game in Game.query.all() if game.hidden == 0]
-    # print(hidden_games)
+    list_of_games = [list_of_games[i:i + 3] for i in range(0, len(list_of_games), 3)]
+    print(hidden_games)
     in_or_out, logged, show_profile = show_log_in_out()
-
+    # print(list_of_games)
     cart_games_amount = sum(session['cart'].values()) if len(session['cart']) else ''
 
     return render_template("homepage.html", list_of_games=list_of_games, length=len(list_of_games),
@@ -328,6 +331,9 @@ def userava():
         img = current_user.avatar
 
         return img
+    else:
+        return url_for('static')
+
 
 
 @app.route('/game_image/<name>')

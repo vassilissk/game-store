@@ -5,7 +5,7 @@ import time
 from time import sleep
 # import flagpy as fp
 #
-# import phonenumbers
+import phonenumbers
 # from phonenumbers import timezone, carrier, geocoder
 
 # phonenumber = phonenumbers.parse("+380679231685")
@@ -27,8 +27,19 @@ from time import sleep
 # ukr = fp.get_flag_img('Ukraine')
 # ukr.show()
 # print(datetime.datetime.now().strftime("%d/%m/%Y, %H:%M:%S"))
-a=datetime.datetime.now()
-sleep(1)
-b=datetime.datetime.now()
-a_timedelta = datetime.timedelta(seconds=3)
-print(type(a),b, b-a<a_timedelta)
+# Parsing String to Phone number
+# phone_number = phonenumbers.parse("+38   (067)923-16-85")
+# 
+# # Validating a phone number
+# valid = phonenumbers.is_valid_number(phone_number)
+# 
+# # Checking possibility of a number
+# possible = phonenumbers.is_possible_number(phone_number)
+# 
+# # Printing the output
+# print(valid)
+# print(possible)
+a=[1,22,3,3,5,6,4,5,6,9]
+result = [a[i:i+3] for i in range(0, len(a), 3)]
+
+print(result)
