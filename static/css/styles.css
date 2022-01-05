@@ -564,7 +564,7 @@ border-color: blue; */
   align-items: center;
 }
 
-.add-game-form{}
+
 
 .admin_panel {
   display: flex;
@@ -809,4 +809,11 @@ border-color: blue; */
 }
 h2{
   margin: 1%;
+}
+
+.reply-edit-delete{
+  display: flex;
+}
+.reply {
+  padding-right: 1em;
 }

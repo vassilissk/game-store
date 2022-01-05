@@ -207,6 +207,13 @@ def delitem(name):
 @app.route('/game/<name>', methods=["POST", "GET"])
 def game(name):
     form = SomeForm()
+    if current_user.is_authenticated and current_user.role in ['Admin', 'Manager']:
+        user_comments = Comment.query.filter(Game.name == name)
+    elif current_user.is_authenticated:
+        user_comments = Comment.query.filter(Game.name == name).filter(Comment.user_id == current_user.id)
+    else:
+        user_comments = []
+
     if request.method == 'POST':
         if current_user.is_authenticated:
             author_name = f"{current_user.first_name} {current_user.last_name}"
@@ -228,10 +235,10 @@ def game(name):
 
     in_or_out, logged, show_profile = show_log_in_out()
     # print(comments)
-    sort_comments(name)
+
     return render_template("game.html", game=current_game, form=form,
                            in_or_out=in_or_out, logged=logged, show_profile=show_profile,
-                           comments=comments)
+                           comments=comments, user_comments=user_comments)
 
 
 @app.route('/add_game', methods=["POST", "GET"])
@@ -332,7 +339,7 @@ def userava():
 
         return img
     else:
-        return url_for('static')
+        return redirect(url_for('static', filename='default.png'))
 
 
 
@@ -345,12 +352,22 @@ def game_image(name):
         return Game.query.filter_by(name='default').first().avatar
 
 
-@app.route('/comment_ava/<user_id>')
-def comment_ava(user_id):
-    # print(user_id)
-    img = User.query.filter_by(id=user_id).first().avatar
+@app.route('/comment_ava/<user_id>/<comment_id>')
+def comment_ava(user_id, comment_id):
+    # # print(user_id)
+    # img = User.query.filter_by(id=user_id).first().avatar
+    #
+    # return img
+    comment = Comment.query.filter_by(id=comment_id).first()
+    user = User.query.filter_by(id=comment.user_id).first()
 
-    return img
+    if user.avatar:
+        # print(current_user.avatar)
+        img = user.avatar
+
+        return img
+    else:
+        return redirect(url_for('static', filename='default.png'))
 
 
 @app.route('/index#logout', methods=["POST", "GET"])
@@ -402,23 +419,7 @@ def success(name):
     return redirect('/game/<name>')
 
 
-def recursion_sort(comments, res):
-    for comment in comments:
-        if comment.children_id:
-            com = [Comment.query.filter(Comment.id == id).first() for id in comment.children_id.split()]
-            print(com)
-            recursion_sort(com, res)
-        else:
-            res.append(comment)
-    return res
 
-
-def sort_comments(name):
-    res = []
-    current_game = Game.query.filter(Game.name == name).first()
-    game_comments = Comment.query.filter(Comment.game_id == current_game.id)
-    for comment in game_comments:
-        print(comment)
 
 
 @app.route('/reply/<name>/<parent_id>', methods=["POST", "GET"])
@@ -439,21 +440,9 @@ def reply(name, parent_id):
                               number_of_parents=parent_comment.number_of_parents + 1,
                               time_left=datetime.datetime.today().strftime("%H:%M:%S %b %d %Y"))
 
-    # db.session.commit()
-    # db.session.add(current_comment)
 
-    # # print(parent_comment.id)
-    # if parent_comment.children_id:
-    #     parent_comment.children_id = parent_comment.children_id + ' ' + str(current_comment.id)
-    #
-    # else:
-    #     parent_comment.children_id = str(current_comment.id)
-
-    #
-    #
     rest_comments = Comment.query.filter(Comment.id > parent_comment.id)
-    # for i in rest_comments:
-    #     print(i)
+
     for comment in rest_comments:
         res.append(comment)
     res1 = copy.deepcopy(res)
@@ -474,6 +463,23 @@ def reply(name, parent_id):
         print('time',datetime.datetime.today().strftime("%H:%M:%S %b %d %Y"))
         db.session.add(com)
     db.session.commit()
+    return redirect(url_for('game', name=name))
+
+
+@app.route('/edit_comment/<name>/<comment_id>', methods=["POST", "GET"])
+def edit_comment(name, comment_id):
+    current_comment = Comment.query.filter(Comment.id == comment_id).first()
+    current_comment.comment = request.form['comment']
+    db.session.commit()
+    return redirect(url_for('game', name=name))
+
+@app.route('/delete_comment/<name>/<comment_id>')
+def delete_comment(name, comment_id):
+    current_comment = Comment.query.filter(Comment.id == comment_id).first()
+    # current_comment.comment = "the comment was deleted by author"
+    db.session.delete(current_comment)
+    db.session.commit()
+
     return redirect(url_for('game', name=name))
 
 

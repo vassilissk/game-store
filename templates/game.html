@@ -53,16 +53,23 @@
  <div class="comment-wrapper">       
     {% for comment in comments %}
 
-        <div class="comments" style="padding-left:{{ comment.number_of_parents * 70 }}px ;">
+    {% if comment in user_comments %}
+    {% set visibility = 'flex' %}
+    {% else %}
+    {% set visibility = 'none' %}
+    {% endif %}
+
+        <div class="comments" style="padding-left:{{ comment.number_of_parents * 70 }}px;">
             
-            <div class="author"><img class="foto" src={{url_for("comment_ava", user_id=comment.user_id)}} alt=""> 
+            <div class="author"><img class="foto" src={{url_for("comment_ava", user_id=comment.user_id, 
+                comment_id=comment.id)}} alt=""> 
                 {{comment.author_name}} <span style="padding-left: 1em;">{{ comment.time_left }}</span>
             </div>
             <div class="comment" >
                 {{comment.comment}}
                
                
-               <div id="comment{{comment.id}}" class="modalDialog" >
+               <div id="reply{{comment.id}}" class="modalDialog" >
                 
                 <div>
                     
@@ -70,7 +77,23 @@
                         {{ form.hidden_tag() }}
 
                         <a href="{{ url_for('game', name=game.name)}}">X</a>
-                        <!-- {% set f = form.comment.process_data(comment.comment) %} -->
+                        {% set f = form.comment.process('') %}
+                        {{ form.comment() }}
+                        {{ form.comment_submit() }}
+                    </form>
+                </div>
+                
+            </div>
+
+            <div id="edit{{comment.id}}" class="modalDialog" >
+                
+                <div>
+                    
+                    <form action="{{ url_for('edit_comment', name=game.name, comment_id=comment.id)}}" method="post">
+                        {{ form.hidden_tag() }}
+
+                        <a href="{{ url_for('game', name=game.name)}}">X</a>
+                        {% set d = form.comment.process_data(comment.comment) %}
                         {{ form.comment() }}
                         {{ form.comment_submit() }}
                     </form>
@@ -81,11 +104,18 @@
             </div>
             
             
-
+<div class="reply-edit-delete">
             <div class="reply">
-             <a href="#comment{{comment.id}}"> reply</a>
+                <a href="#reply{{comment.id}}"> reply</a>
             </div>
-            
+            <div class="reply">
+                <a href="#edit{{comment.id}}" style="display: {{ visibility }};">edit</a> 
+            </div>
+            <div class="reply">
+                <a href="{{ url_for('delete_comment', name=game.name, comment_id=comment.id)}}" 
+                style="display: {{ visibility }};">delete</a> 
+            </div>
+</div>            
         </div>
     {% endfor %}
 </div>

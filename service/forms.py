@@ -63,10 +63,10 @@ class SomeForm(FlaskForm):
     logout_submit = SubmitField('Logout', id='log_out')
     upload = FileField('Upload avatar')
     upload_submit = SubmitField('Upload')
-    comment = TextAreaField("TextArea", validators=[DataRequired()],
+    comment = TextAreaField(validators=[DataRequired()],
                             render_kw={"rows": 8, "cols": 21}
                             )
-    comment_submit = SubmitField('Submit', id='comment_submit')
+    comment_submit = SubmitField('Submit')
 
     add_game_submit = SubmitField('Add new game', id='add_new_game')
     add_game_name = StringField('Name', validators=[DataRequired()], render_kw=style)
