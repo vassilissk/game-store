@@ -38,9 +38,9 @@
 
         <div id="add_comment" class="modalDialog">
             <div>
-                <form action="{{ url_for('game', name=game.name)}}" method="post">
+                <form class="add-reply-comment" action="{{ url_for('game', name=game.name)}}" method="post">
                     {{ form.hidden_tag() }}
-                    <a href="{{ url_for('game', name=game.name)}}">X</a>
+                    <a class="close-comment" href="{{ url_for('game', name=game.name)}}">&times;</a>
                     
                     {{ form.comment() }}
                     {{ form.comment_submit() }}
@@ -73,10 +73,11 @@
                 
                 <div>
                     
-                    <form action="{{ url_for('reply', name=game.name, parent_id=comment.id)}}" method="post">
+                    <form class="add-reply-comment" action="{{ url_for('reply', name=game.name, 
+                                parent_id=comment.id)}}" method="post">
                         {{ form.hidden_tag() }}
 
-                        <a href="{{ url_for('game', name=game.name)}}">X</a>
+                        <a class="close-comment" href="{{ url_for('game', name=game.name)}}">&times;</a>
                         {% set f = form.comment.process('') %}
                         {{ form.comment() }}
                         {{ form.comment_submit() }}
@@ -89,10 +90,11 @@
                 
                 <div>
                     
-                    <form action="{{ url_for('edit_comment', name=game.name, comment_id=comment.id)}}" method="post">
+                    <form class="add-reply-comment" action="{{ url_for('edit_comment',
+                                 name=game.name, comment_id=comment.id)}}" method="post">
                         {{ form.hidden_tag() }}
 
-                        <a href="{{ url_for('game', name=game.name)}}">X</a>
+                        <a href="{{ url_for('game', name=game.name)}}">&times;</a>
                         {% set d = form.comment.process_data(comment.comment) %}
                         {{ form.comment() }}
                         {{ form.comment_submit() }}

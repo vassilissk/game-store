@@ -817,3 +817,14 @@ h2{
 .reply {
   padding-right: 1em;
 }
+
+.add-reply-comment{
+  display: flex;
+  flex-direction: column;}
+
+.close-comment, .close-comment:visited{
+  color: black;
+  text-decoration: none;
+  font-size: 1.5em;
+  
+}

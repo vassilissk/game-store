@@ -63,10 +63,13 @@ def index():
             search_request = request.form.get('search')
             # print('Hello', search_request == True)
             games = Game.query.all()
+
             for game in games:
                 if search_request.lower() in game.name.lower():
                     list_of_games.append(game)
+
             list_of_games = [list_of_games[i:i + 3] for i in range(0, len(list_of_games), 3)]
+
             if not bool(search_request):
                 list_of_games = [game for game in games if game.hidden == 0]
                 list_of_games = [list_of_games[i:i + 3] for i in range(0, len(list_of_games), 3)]
@@ -476,8 +479,9 @@ def edit_comment(name, comment_id):
 @app.route('/delete_comment/<name>/<comment_id>')
 def delete_comment(name, comment_id):
     current_comment = Comment.query.filter(Comment.id == comment_id).first()
-    # current_comment.comment = "the comment was deleted by author"
-    db.session.delete(current_comment)
+    current_comment.comment = "the comment was deleted by author"
+    if current_user.role in ['Admin', 'Manager']:
+        db.session.delete(current_comment)
     db.session.commit()
 
     return redirect(url_for('game', name=name))
@@ -581,7 +585,7 @@ def close_order(customer_id):
 @login_required
 def users_list():
     form = SomeForm()
-    users = User.query.filter(User.id > 2)
+    users = User.query.filter(User.id > 1)
 
     in_or_out, logged, show_profile = show_log_in_out()
     return render_template('users_list.html', form=form, in_or_out=in_or_out,
