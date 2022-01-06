@@ -73,9 +73,10 @@ def index():
             if not bool(search_request):
                 list_of_games = [game for game in games if game.hidden == 0]
                 list_of_games = [list_of_games[i:i + 3] for i in range(0, len(list_of_games), 3)]
+
             in_or_out, logged, show_profile = show_log_in_out()
             hidden_games = [game for game in Game.query.all() if game.hidden > 0]
-            # print(list_of_games, len(list_of_games))
+
             return render_template("homepage.html", list_of_games=list_of_games, length=len(list_of_games),
                                    form=form, in_or_out=in_or_out, logged=logged, hidden_games=hidden_games,
                                    admin_display=admin_display, show_profile=show_profile)
@@ -83,7 +84,7 @@ def index():
             # -----------------sort by genres ---------------
 
         if any([genre in request.form for genre in genres]):
-            # flash('You were successfully logged in')
+
 
             for genre in genres:
                 selected_genres[genre] = request.form.get(genre, False)
@@ -92,11 +93,9 @@ def index():
                 if selected_genres[genre]:
                     for game in games:
                         if genre in game.genre.lower().split() and game.hidden == 0:
-                            # print(game)
-                            # if game.hidden == 0:
                             list_of_games.append(game)
-            # hidden_games = [game for game in Game.query.all() if game.hidden > 0]
-            # print(list_of_games)
+
+            list_of_games = [list_of_games[i:i + 3] for i in range(0, len(list_of_games), 3)]
             in_or_out, logged, show_profile = show_log_in_out()
             hidden_games = [game for game in Game.query.all() if game.hidden > 0]
             return render_template("homepage.html", list_of_games=list_of_games, length=len(list_of_games),
@@ -140,7 +139,7 @@ def index():
                 flash(f"e-mail {email} already exists")
                 return flask.redirect("/index#register")
 
-            # if request.form['password'] == request.form['confirm_password']
+
             hash = generate_password_hash(request.form['password'])
 
             user = User(username=request.form['username'], first_name=request.form['first_name'],
@@ -151,12 +150,12 @@ def index():
             return flask.redirect("/index#login")
 
     hidden_games = [game for game in Game.query.all() if game.hidden > 0]
-    # hidden_games = [hidden_games[i:i + 3] for i in range(0, len(hidden_games), 3)]
+
     list_of_games = [game for game in Game.query.all() if game.hidden == 0]
     list_of_games = [list_of_games[i:i + 3] for i in range(0, len(list_of_games), 3)]
     print(hidden_games)
     in_or_out, logged, show_profile = show_log_in_out()
-    # print(list_of_games)
+
     cart_games_amount = sum(session['cart'].values()) if len(session['cart']) else ''
 
     return render_template("homepage.html", list_of_games=list_of_games, length=len(list_of_games),
@@ -169,7 +168,7 @@ def index():
 def cart():
     form = SomeForm()
     game_in_cart_list = []
-    # print(session['cart'])
+
 
     for item in session['cart']:
         game_in_cart = Game.query.filter(Game.name == item).first()
@@ -179,7 +178,7 @@ def cart():
     in_or_out, logged, show_profile = show_log_in_out()
     total = sum(
         [Game.query.filter(Game.name == item).first().price * session['cart'][item] for item in session['cart']])
-    # print(total)
+
     return render_template("cart.html", form=form, game_in_cart_list=game_in_cart_list,
                            cart_games_amount=cart_games_amount, in_or_out=in_or_out,
                            logged=logged, show_profile=show_profile, total=total)
@@ -200,10 +199,10 @@ def cart_plus_minus(name):
 
 @app.route('/delitem/<name>')
 def delitem(name):
-    # print(session['cart'])
+
     session['cart'].pop(name)
     session.modified = True
-    # print(session['cart'])
+
     return redirect("/cart")
 
 
@@ -237,7 +236,6 @@ def game(name):
     comments = Comment.query.filter(Comment.game_id == current_game.id)
 
     in_or_out, logged, show_profile = show_log_in_out()
-    # print(comments)
 
     return render_template("game.html", game=current_game, form=form,
                            in_or_out=in_or_out, logged=logged, show_profile=show_profile,
@@ -307,14 +305,12 @@ def hide_game(name):
 @app.route('/restore_game/<name>', methods=["POST", "GET"])
 @login_required
 def restore_game(name):
-    form = SomeForm()
 
     game = Game.query.filter_by(name=name).first()
     game.hidden = 0
     game.hidden_date = None
     db.session.commit()
-    # game = Game.query.filter_by(name=name).first()
-    # print('game',game.hidden)
+
     return redirect(url_for('index', game=game))
 
 
@@ -323,7 +319,7 @@ def test():
     form = SomeForm()
 
     if request.method == 'POST':
-        # print('hello')
+
         image = request.files['img']
         avatar = image.read()
         user = User.query.filter_by(username=current_user.username).first()
@@ -355,17 +351,14 @@ def game_image(name):
         return Game.query.filter_by(name='default').first().avatar
 
 
-@app.route('/comment_ava/<user_id>/<comment_id>')
-def comment_ava(user_id, comment_id):
-    # # print(user_id)
-    # img = User.query.filter_by(id=user_id).first().avatar
-    #
-    # return img
+@app.route('/comment_ava/<comment_id>')
+def comment_ava(comment_id):
+
     comment = Comment.query.filter_by(id=comment_id).first()
     user = User.query.filter_by(id=comment.user_id).first()
 
     if user.avatar:
-        # print(current_user.avatar)
+
         img = user.avatar
 
         return img
