@@ -8,7 +8,11 @@
 
 {% for customer in customers_list %}
 <a href="{{ url_for('order', customer_id = customer.id) }}" class="customer">
-    <div >{{customer.id}} {{customer.first_name}} {{customer.last_name}} {{customer.date_of_order}}</div>
+    <div >       
+       <span>{{customer.first_name}}  {{customer.last_name}} </span>
+       <span>{{customer.date_of_order}}</span>
+       <span>{{customer.status}}</span>
+    </div>
 </a>
 
 

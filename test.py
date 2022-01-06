@@ -28,18 +28,18 @@ import phonenumbers
 # ukr.show()
 # print(datetime.datetime.now().strftime("%d/%m/%Y, %H:%M:%S"))
 # Parsing String to Phone number
-# phone_number = phonenumbers.parse("+38   (067)923-16-85")
-# 
-# # Validating a phone number
-# valid = phonenumbers.is_valid_number(phone_number)
-# 
-# # Checking possibility of a number
-# possible = phonenumbers.is_possible_number(phone_number)
-# 
-# # Printing the output
-# print(valid)
-# print(possible)
-a=[1,22,3,3,5,6,4,5,6,9]
-result = [a[i:i+3] for i in range(0, len(a), 3)]
+phone_number = phonenumbers.parse("+38 (067) 456 78 90")
 
-print(result)
+# Validating a phone number
+valid = phonenumbers.is_valid_number(phone_number)
+
+# Checking possibility of a number
+possible = phonenumbers.is_possible_number(phone_number)
+
+# Printing the output
+print(valid)
+print(possible)
+# a=[1,22,3,3,5,6,4,5,6,9]
+# result = [a[i:i+3] for i in range(0, len(a), 3)]
+#
+# print(result)

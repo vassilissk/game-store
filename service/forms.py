@@ -1,6 +1,8 @@
 from flask_wtf import FlaskForm
+from wtforms.fields.html5 import EmailField
 from wtforms import SelectField, SubmitField, StringField, FileField, BooleanField, \
     DateField, DateTimeField, SelectMultipleField, PasswordField, MultipleFileField, TextAreaField
+
 from wtforms.validators import DataRequired, Email, Length
 # import phonenumbers
 from wtforms.widgets import TextArea
@@ -49,7 +51,7 @@ class SomeForm(FlaskForm):
                              render_kw=style)
     confirm_password = PasswordField('Confirm password', id='confirm_password',render_kw=style,
                                      validators=[DataRequired(), Length(min=4, max=100)])
-    email = StringField('Email', validators=[DataRequired(), Email()],
+    email = EmailField('Email', validators=[DataRequired(), Email()],
                         render_kw=style)
     sign_up_submit = SubmitField('Sign up', id='sign_up_submit')
     profile_password = PasswordField('Password', validators=[Length(min=4, max=100)],

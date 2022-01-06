@@ -1,7 +1,7 @@
 import time
 import bdb
 import copy
-
+import phonenumbers
 import requests.cookies
 import datetime
 from service.crud_operations import *
@@ -499,7 +499,7 @@ def confirm_order():
     # ukr = fp.get_flag_img('Ukraine')
     display_method = "block"
     if request.method == "POST":
-        # print(request.form)
+
         first_name = request.form['first_name']
         last_name = request.form['last_name']
         email = request.form['email']
@@ -507,7 +507,15 @@ def confirm_order():
         payment_type = request.form['payment_type']
         comment = request.form['add_game_description']
         date_of_order = datetime.datetime.today().strftime("%H:%M:%S %b %d %Y")
-        # print(date_of_order)
+
+        try:
+            phone_number = phonenumbers.parse(phone)
+            if not phonenumbers.is_valid_number(phone_number):
+                raise ValueError()
+
+        except (phonenumbers.phonenumberutil.NumberParseException, ValueError):
+            flash('Please enter the correct phone number')
+            return redirect('/confirm_order')
         customer = Customer(first_name=first_name, last_name=last_name, email=email,
                             phone=phone, payment_type=payment_type, comment=comment, date_of_order=date_of_order)
         db.session.add(customer)
@@ -548,9 +556,7 @@ def customers_list():
 @app.route('/order/<customer_id>')
 def order(customer_id):
     form = SomeForm()
-    # print(customer_id)
-    # cart_games_amount = sum(session['cart'].values()) if \
-    #     len(session['cart']) and sum(session['cart'].values()) else ''
+
 
     customer = Customer.query.filter_by(id=customer_id).first()
     order = Order.query.filter_by(user_id=customer_id)
@@ -562,8 +568,8 @@ def order(customer_id):
                            logged=logged, show_profile=show_profile, total=total)
 
 
-@app.route('/close_order/<customer_id>')
-def close_order(customer_id):
+@app.route('/delete_order/<customer_id>')
+def delete_order(customer_id):
     # print(customer_id)
     customer = Customer.query.filter_by(id=customer_id).first()
     orders = Order.query.filter_by(user_id=customer_id)
@@ -573,6 +579,13 @@ def close_order(customer_id):
     db.session.commit()
     return redirect('/customers_list')
 
+
+@app.route('/close_order/<customer_id>')
+def close_order(customer_id):
+    customer = Customer.query.filter_by(id=customer_id).first()
+    customer.status = "Done"
+    db.session.commit()
+    return redirect('/customers_list')
 
 @app.route('/users_list')
 @login_required

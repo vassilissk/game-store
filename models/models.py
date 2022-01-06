@@ -77,6 +77,7 @@ class Customer(db.Model):
     payment_type = db.Column(db.String(20), nullable=False)
     comment = db.Column(db.String(600), nullable=True)
     date_of_order = db.Column(db.String, nullable=False)
+    status = db.Column(db.String, default="In process")
 
 
 class Order(db.Model):
