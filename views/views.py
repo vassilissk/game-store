@@ -79,7 +79,8 @@ def index():
 
             return render_template("homepage.html", list_of_games=list_of_games, length=len(list_of_games),
                                    form=form, in_or_out=in_or_out, logged=logged, hidden_games=hidden_games,
-                                   admin_display=admin_display, show_profile=show_profile)
+                                   admin_display=admin_display, manager_display=manager_display,
+                                   show_profile=show_profile)
 
             # -----------------sort by genres ---------------
 
@@ -609,6 +610,11 @@ def change_role(user_id):
         print(role)
         db.session.commit()
         return redirect('/users_list')
+
+@app.errorhandler(404)
+def page_not_found(e):
+    form = SomeForm()
+    return render_template('404.html', form=form), 404
 
 
 # @app.route('/country')
