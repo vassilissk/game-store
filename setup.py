@@ -20,12 +20,11 @@ app.config["REMEMBER_COOKIE_DURATION"] = timedelta(weeks=1)
 # admin = Admin(app)
 from views.views import *
 
-from models.models import Game,User,db
+from models.models import Game, User, db
+
 # admin.add_view(ModelView(User,db.session))
 # admin.add_view(ModelView(Game,db.session))
 app.secret_key = 'the random string'
-
-
 
 
 def background_deleting():
@@ -36,10 +35,14 @@ def background_deleting():
     db.session.commit()
 
 
+def test_func():
+    print("Hello")
 
-sched = BackgroundScheduler(daemon=True)
-sched.add_job(background_deleting, 'interval', weeks=1)
-sched.start()
+
+schedule = BackgroundScheduler(daemon=True)
+# sched.add_job(background_deleting, 'interval', weeks=1)
+schedule.add_job(test_func, 'cron', week='1-53')
+schedule.start()
 
 if __name__ == "__main__":
     app.run(debug=True)
