@@ -40,7 +40,7 @@ def index():
     res.set_cookie("remember_token", "", expires=0)
     form = SomeForm()
 
-    genres = ['strategy', 'adventure', 'action', 'survival', 'rpg']
+    genres = ['strategy', 'adventure', 'action', 'survival', 'rpg', 'fps']
     selected_genres = dict()
     if current_user.is_authenticated and\
             current_user.role == 'Manager' :
@@ -86,7 +86,7 @@ def index():
 
         if any([genre in request.form for genre in genres]):
 
-
+            games = Game.query.all()
             for genre in genres:
                 selected_genres[genre] = request.form.get(genre, False)
 
@@ -99,6 +99,8 @@ def index():
             list_of_games = [list_of_games[i:i + 3] for i in range(0, len(list_of_games), 3)]
             in_or_out, logged, show_profile = show_log_in_out()
             hidden_games = [game for game in Game.query.all() if game.hidden > 0]
+            hidden_games = [hidden_games[i:i + 3] for i in range(0, len(hidden_games), 3)]
+            print('hidden games:', hidden_games)
             return render_template("homepage.html", list_of_games=list_of_games, length=len(list_of_games),
                                    form=form, in_or_out=in_or_out, logged=logged, hidden_games=hidden_games,
                                    manager_display=manager_display, show_profile=show_profile,
@@ -151,6 +153,8 @@ def index():
             return flask.redirect("/index#login")
 
     hidden_games = [game for game in Game.query.all() if game.hidden > 0]
+    hidden_games = [hidden_games[i:i + 3] for i in range(0, len(hidden_games), 3)]
+    print('hidden games:', hidden_games)
 
     list_of_games = [game for game in Game.query.all() if game.hidden == 0]
     list_of_games = [list_of_games[i:i + 3] for i in range(0, len(list_of_games), 3)]

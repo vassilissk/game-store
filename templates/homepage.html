@@ -120,45 +120,42 @@
         {% endfor %}
     </div>
     {% endfor %}
-</section>
 
-<section class="main" style="display:{{manager_display}}">
 <h1>Hidden games</h1>
 
-{% for i in range(0,length,3) %}
+{% for wrapper in hidden_games %}
 
     <div class="wrapper">
-        {% for j in range(i,i+3) %}
-            {% if hidden_games[j] %}
+        {% for game in wrapper %}
 
-                <article class="game-in-list" id={{hidden_games[j].name.replace(' ', '')}}>
+                <article class="game-in-list" id={{game.name.replace(' ', '')}}>
 
-                    <a href="{{ url_for('game', name=hidden_games[j].name) }}">
-                        <img class="game-foto" src="{{ url_for('game_image',name=hidden_games[j].name) }}" alt="">
+                    <a href="{{ url_for('game', name=game.name) }}">
+                        <img class="game-foto" src="{{ url_for('game_image',name=game.name) }}" alt="">
                     </a>
                     <div class="price-and-button">
-                        <span>${{hidden_games[j].price}}</span>
+                        <span>${{game.price}}</span>
                         
                         <form  method='post'>
                             <input type="submit" class="buy-btn" value="Buy">
                             </form>
                     </div>
-                    {% for i in hidden_games[j].genre.split() %}
+                    {% for i in game.genre.split() %}
                         <span class="genre">{{i}}</span>
                     {% endfor %}
                     
-                    <div class="game-name">{{hidden_games[j].name}}</div>
+                    <div class="game-name">{{game.name}}</div>
 
                     <div class="game-in-list-admin" style="display:{{manager_display}}">
                         <div class="game-in-list-admin-wrapper">
-                            <a href="{{url_for('edit_game', name=hidden_games[j].name)}}"><i class="fa fa-edit"></i><span>Edit game</span></a>
-                            <a href="{{url_for('restore_game', name=hidden_games[j].name)}}"><i class="fa fa-trash"></i><span>Restore game</span></a>
+                            <a href="{{url_for('edit_game', name=game.name)}}"><i class="fa fa-edit"></i><span>Edit game</span></a>
+                            <a href="{{url_for('restore_game', name=game.name)}}"><i class="fa fa-trash"></i><span>Restore game</span></a>
                         </div>
 
                     </div>
                 </article>
                 
-            {% endif %}
+            
         {% endfor %}
     </div>
     {% endfor %}

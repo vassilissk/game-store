@@ -169,10 +169,13 @@ menu li:hover {
   margin-left: 2vw;
   margin-right: 2vw;
   overflow-y: scroll;
-  /* position: fixed;
-    bottom: 8vh; */
+  
   /* align-items: center ;     */
 }
+ /* .main .hidden{
+position: fixed;
+    bottom: 8vh;
+ } */
 
 .main::-webkit-scrollbar,
 .cart-main::-webkit-scrollbar,
