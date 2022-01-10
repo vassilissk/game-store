@@ -1,6 +1,5 @@
-# import threading, schedule, time
-# import datetime
-# from service.crud_operations import *
+from flask_migrate import Migrate, MigrateCommand
+from flask_script import Manager
 from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask, session
 from datetime import timedelta
@@ -26,7 +25,7 @@ from models.models import Game, User, db
 # admin.add_view(ModelView(Game,db.session))
 app.secret_key = 'the random string'
 
-
+migrate = Migrate(app, db)
 def background_deleting():
     games = Game.query.filter(Game.hidden == 1)
     for game in games:

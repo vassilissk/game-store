@@ -121,8 +121,8 @@
     </div>
     {% endfor %}
 
-<h1>Hidden games</h1>
-
+<h1 style="display:{{manager_display}}">Hidden games</h1>
+<div style="display:{{manager_display}}">
 {% for wrapper in hidden_games %}
 
     <div class="wrapper">
@@ -159,7 +159,7 @@
         {% endfor %}
     </div>
     {% endfor %}
-
+</div>
 </section>
 {% endblock %}
 

@@ -172,10 +172,7 @@ menu li:hover {
   
   /* align-items: center ;     */
 }
- /* .main .hidden{
-position: fixed;
-    bottom: 8vh;
- } */
+ 
 
 .main::-webkit-scrollbar,
 .cart-main::-webkit-scrollbar,
@@ -442,7 +439,7 @@ hr {
   z-index: 2;
 
   top: 18%;
-  right: 22%;
+  right: 8%;
   background-color: rgb(86, 88, 90);
 }
 
@@ -752,8 +749,20 @@ border-color: blue; */
   width: 500px;
   justify-content: space-between;
 }
+.order-p-game{
+  /* border: 1px solid red; */
+  width: 80%;
+  display: flex;
+  justify-content: space-between;
+}
 .order-p-game span {
+  display: flex;
+  justify-content: start;
+  align-items: center;
   padding: 0 1em;
+  /* text-align: center; */
+  width: 40vw;
+  /* border: 1px solid white; */
 }
 .customer-comment {
   width: 300px;
@@ -768,7 +777,7 @@ border-color: blue; */
   position: fixed;
   bottom: 8vh;
   overflow-y: scroll;
-  height: 75%;
+  height: 82%;
   background-color: var(--main-bg-color);
 }
 
